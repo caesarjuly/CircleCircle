@@ -2,18 +2,22 @@ package ustc.wth.circlecircle;
 
 
 import android.os.Bundle;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.app.ListFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
 
 public class MainActivity extends FragmentActivity {
 
-	//定义FragmentTabHost对象
+	//定义FragmentmTabHost对象
 		private FragmentTabHost mTabHost;
 		
 		//定义一个布局
@@ -43,7 +47,7 @@ public class MainActivity extends FragmentActivity {
 			//实例化布局对象
 			layoutInflater = LayoutInflater.from(this);
 					
-			//实例化TabHost对象，得到TabHost
+			//实例化mTabHost对象，得到mTabHost
 			mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
 			mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);	
 			
@@ -58,6 +62,7 @@ public class MainActivity extends FragmentActivity {
 				//设置Tab按钮的背景
 				mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.selector_tab_background);
 			}
+			   
 		}
 					
 		/**

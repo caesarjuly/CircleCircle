@@ -3,9 +3,12 @@
     package="ustc.wth.circlecircle"
     android:versionCode="1"
     android:versionName="1.0" >
-
+	<uses-permission android:name="android.permission.READ_CONTACTS" />
+	
+	<uses-permission android:name="android.permission.WRITE_CONTACTS" /> 
+	<uses-permission android:name="android.permission.READ_SMS"/> 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="16" />
 
     <application
