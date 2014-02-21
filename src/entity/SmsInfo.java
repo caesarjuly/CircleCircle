@@ -35,7 +35,7 @@ public class SmsInfo {
 	 */
 	private String date;
 	/**
-	 * 发送短信人的姓名
+	 * 发送短信人的id
 	 */
 	private String name;
 	/**

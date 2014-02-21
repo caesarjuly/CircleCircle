@@ -30,10 +30,10 @@ public class Uris {
 	/**
 	 * 所有联系人
 	 */
-	private static final String Contacts_URI_ALL = "content://com.android.contacts/contacts"; 
+	public static final String Contacts_URI_ALL = "content://com.android.contacts/contacts"; 
 	/**
 	 * 单个联系人
 	 * #代表联系人id
 	 */
-	private static final String Contacts_URI_SINGLE = "content://com.android.contacts/contacts/#/data"; 
+	public static final String Contacts_URI_SINGLE = "content://com.android.contacts/contacts/#/data"; 
 }

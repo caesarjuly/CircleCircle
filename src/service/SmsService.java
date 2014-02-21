@@ -38,8 +38,11 @@ public class SmsService {
 	public List<SmsInfo> getSmsInfo() {
 		
 		ContentResolver resolver = activity.getContentResolver();
-		Cursor cursor = resolver.query(uri, projection, null, null,
-				null);
+		//使用hack完成distinct查询，也可自己覆写provider实现
+		Cursor cursor = resolver.query(uri, 
+	            new String[]{"DISTINCT address", "body", "person", "date", "type"}, //DISTINCT
+	            "address IS NOT NULL) GROUP BY (address", //GROUP BY
+	            null, null);
 		int nameColumn = cursor.getColumnIndex("person");
 		int phoneNumberColumn = cursor.getColumnIndex("address");
 		int smsbodyColumn = cursor.getColumnIndex("body");

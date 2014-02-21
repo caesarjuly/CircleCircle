@@ -4,10 +4,9 @@ import global.Uris;
 
 import entity.SmsInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import service.ContactService;
 import service.SmsService;
 
 import android.support.v4.app.ListFragment;
@@ -24,6 +23,8 @@ import android.widget.Toast;
 
 public class FragmentMessage extends ListFragment { 
 	private List<SmsInfo> infos;
+	private ContactService contact;
+	private SmsService sms;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,7 +36,9 @@ public class FragmentMessage extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Uri uri = Uri.parse(Uris.SMS_URI_ALL);
-		SmsService sms = new SmsService(this.getActivity(), uri);
+		sms = new SmsService(this.getActivity(), uri);
+		uri = Uri.parse(Uris.Contacts_URI_ALL);
+		contact = new ContactService(this.getActivity(), uri);
 		infos = sms.getSmsInfo();
 		setListAdapter(new SmsListAdapter(this.getActivity()));
 
@@ -45,7 +48,7 @@ public class FragmentMessage extends ListFragment {
 		private LayoutInflater layoutinflater;
 		private View myview;
 
-		public SmsListAdapter(Context c) {
+		public SmsListAdapter(Context c) {	
 			layoutinflater = LayoutInflater.from(c);
 		}
 
@@ -69,9 +72,11 @@ public class FragmentMessage extends ListFragment {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			//if (convertView == null) {
+			if (convertView != null) {
+				myview = convertView;
+			}else{
 				myview = layoutinflater.inflate(R.layout.message_line, null);
-			//}
+			}
 			TextView body = (TextView) myview
 					.findViewById(R.id.body);
 			TextView name = (TextView) myview
@@ -79,8 +84,14 @@ public class FragmentMessage extends ListFragment {
 			TextView date = (TextView) myview
 					.findViewById(R.id.date);
 			body.setText(infos.get(position).getSmsbody());
-			name.setText(infos.get(position).getName());
 			date.setText(infos.get(position).getDate());
+			String phone = infos.get(position).getPhoneNumber();
+			String contactName = contact.getNameByPhone(phone);
+			if(contactName == null){
+				name.setText(phone);
+			}else{
+				name.setText(contactName);
+			}
 			return myview;
 		}
 
