@@ -11,6 +11,16 @@ public class ContactInfo {
 	 * µç»°
 	 */
 	private String phone;
+	
+	public String getSortKey() {
+		return sortKey;
+	}
+
+	public void setSortKey(String sortKey) {
+		this.sortKey = sortKey;
+	}
+
+	private String sortKey;
 	/**
 	 * Í·Ïñ
 	 */
