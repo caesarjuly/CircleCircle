@@ -1,29 +1,21 @@
 package ustc.wth.circlecircle;
 
-import global.Uris;
-
-import entity.SmsInfo;
-
 import java.util.List;
-
-import service.ContactService;
 import service.SmsService;
 
-import android.support.v4.app.ListFragment;
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+import entity.ThreadInfo;
+import adapter.*;
 
-public class FragmentMessage extends ListFragment { 
-	private List<SmsInfo> infos;
-	private ContactService contact;
+public class FragmentMessage extends ListFragment {
+	private List<ThreadInfo> threads;
 	private SmsService sms;
 
 	@Override
@@ -35,72 +27,23 @@ public class FragmentMessage extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Uri uri = Uri.parse(Uris.SMS_URI_ALL);
-		sms = new SmsService(this.getActivity(), uri);
-		uri = Uri.parse(Uris.Contacts_URI_ALL);
-		contact = new ContactService(this.getActivity(), uri);
-		infos = sms.getSmsInfo();
-		setListAdapter(new SmsListAdapter(this.getActivity()));
-
-	}
-	
-	class SmsListAdapter extends BaseAdapter {
-		private LayoutInflater layoutinflater;
-		private View myview;
-
-		public SmsListAdapter(Context c) {	
-			layoutinflater = LayoutInflater.from(c);
-		}
-
-		@Override
-		public int getCount() {
-			// TODO Auto-generated method stub
-			return infos.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public long getItemId(int position) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView != null) {
-				myview = convertView;
-			}else{
-				myview = layoutinflater.inflate(R.layout.message_line, null);
-			}
-			TextView body = (TextView) myview
-					.findViewById(R.id.body);
-			TextView name = (TextView) myview
-					.findViewById(R.id.name);
-			TextView date = (TextView) myview
-					.findViewById(R.id.date);
-			body.setText(infos.get(position).getSmsbody());
-			date.setText(infos.get(position).getDate());
-			String phone = infos.get(position).getPhoneNumber();
-			String contactName = contact.getNameByPhone(phone);
-			if(contactName == null){
-				name.setText(phone);
-			}else{
-				name.setText(contactName);
-			}
-			return myview;
-		}
-
+		sms = new SmsService(this.getActivity());
+		threads = sms.getSmsInfo();
+		setListAdapter(new SmsListAdapter(this.getActivity(), threads));
+		String unReadNum = sms.getUnreadNum();
+		Toast.makeText(getActivity(), "您有" + unReadNum + "条新消息！",
+				Toast.LENGTH_LONG).show();
 	}
 
 	public void onListItemClick(ListView parent, View v, int position, long id) {
-		Toast.makeText(getActivity(),
-				"You have selected ", Toast.LENGTH_SHORT)
-				.show();
+		// 生成一个Intent对象
+		Intent intent = new Intent();
+		// 在Intent对象当中添加一个键值对
+		intent.putExtra("testIntent", "123");
+		// 设置Intent对象要启动的Activity
+		intent.setClass(getActivity(), MessageThreadActivity.class);
+		// 通过Intent对象启动另外一个Activity
+		startActivity(intent);
 	}
 
 }

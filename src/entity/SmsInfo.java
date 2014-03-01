@@ -1,5 +1,7 @@
 package entity;
 
+import android.graphics.Bitmap;
+
 /**
  * class name：SmsInfo
  * class description：短信信息实体类
@@ -42,6 +44,18 @@ public class SmsInfo {
 	 * 短信类型1是接收到的，2是已发出
 	 */
 	private String type;
+	/**
+	 * 是否阅读
+	 */
+	private String read;
+	/**
+	 * 会话中的短信数
+	 */
+	private String dialogCount;
+	/**
+	 * 会话人头像
+	 */
+	private Bitmap photo;
 
 	public String getSmsbody() {
 		return smsbody;
@@ -81,5 +95,29 @@ public class SmsInfo {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public String getRead() {
+		return read;
+	}
+
+	public void setRead(String read) {
+		this.read = read;
+	}
+	
+	public String getDialogCount() {
+		return dialogCount;
+	}
+
+	public void setDialogCount(String dialogCount) {
+		this.dialogCount = dialogCount;
+	}
+	
+	public Bitmap getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(Bitmap photo) {
+		this.photo = photo;
 	}
 }

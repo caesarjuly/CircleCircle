@@ -1,37 +1,47 @@
 package service;
 
+import java.io.InputStream;
+import entity.ContactInfo;
+
 import global.Uris;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.ContactsContract.PhoneLookup;
+import android.provider.ContactsContract;
 
 public class ContactService {
-	String contactName;
 	private Activity activity;
-	private Uri uri;
 	
-	public ContactService(Activity activity, Uri uri){
+	public ContactService(Activity activity){
 		this.activity = activity;
-		this.uri = uri;
 	}
 	
-	public String getNameByPhone(String phone){
+	public ContactInfo getContactByPhone(String phone){
+		ContactInfo ct = new ContactInfo();
+		String name;
 		ContentResolver resolver = activity.getContentResolver();
-		Cursor cursor = resolver.query(Uri.withAppendedPath(
-                PhoneLookup.CONTENT_FILTER_URI, phone), new String[] {
-                PhoneLookup._ID,
-                PhoneLookup.NUMBER,
-                PhoneLookup.DISPLAY_NAME,
-                PhoneLookup.TYPE, PhoneLookup.LABEL }, null, null,   null );
+		Uri uri = Uri.parse(Uris.Contacts_URI_PHONE + phone);  
+        Cursor cursor = resolver.query(uri, null, null,  
+                        null, null);  
         if(cursor.getCount()>0) {
         	cursor.moveToFirst();
-            String name = cursor.getString(cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME)); //获取姓名
-            return name;
-        }else{
-        	return null;
-        }
-       
+        	Long contactID = cursor.getLong(cursor.getColumnIndex("contact_id")); 
+            name = cursor.getString(cursor.getColumnIndex("display_name")); //获取姓名
+            uri = ContentUris.withAppendedId(  
+                    ContactsContract.Contacts.CONTENT_URI, contactID);  
+            InputStream input = ContactsContract.Contacts  
+                    .openContactPhotoInputStream(resolver, uri);  
+            Bitmap photo = BitmapFactory.decodeStream(input);
+            ct.setName(name);
+            ct.setPhoto(photo);
+            }
+        ct.setPhone(phone);
+        cursor.close();
+        return ct;
 	}
+	
 }

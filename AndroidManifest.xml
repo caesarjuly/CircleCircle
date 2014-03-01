@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="ustc.wth.circlecircle.MessageThreadActivity" android:label="短信"/>
     </application>
 
 </manifest>
