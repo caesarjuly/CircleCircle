@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import entity.Contactinfo;
+import entity.ContactInfo;
 import entity.SmsInfo;
 import global.Uris;
 import android.app.Activity;
@@ -55,10 +55,10 @@ public class Contactservice2 {
 	 * Date:2014-2-23
 	 * 
 	 */
-	public List<Contactinfo> getContactInfo() {
+	public List<ContactInfo> getContactInfo() {
 		String strPhoneNumber="";
 		
-		List<Contactinfo> contact_infos=new ArrayList<Contactinfo>();
+		List<ContactInfo> contact_infos=new ArrayList<ContactInfo>();
 		ContentResolver resolver = activity.getContentResolver();
 		
 		cursor = resolver.query(uri,
@@ -74,9 +74,9 @@ public class Contactservice2 {
 				while (cursor.moveToNext()) {
 					String name = cursor.getString(0);
 					String sortKey = getSortKey(cursor.getString(1));		
-					Contactinfo contactinfo = new Contactinfo();
-					contactinfo.setName(name);
-					contactinfo.setSortKey(sortKey);
+					ContactInfo ContactInfo = new ContactInfo();
+					ContactInfo.setName(name);
+					ContactInfo.setSortKey(sortKey);
 					
 					//得到电话号码 
 					// 获取联系人的ID号，在SQLite中的数据库ID  
@@ -98,9 +98,9 @@ public class Contactservice2 {
 
 					   }  
 					//设置号码	
-					//contactinfo.setPhoneNumber(strPhoneNumber);
+					//ContactInfo.setPhoneNumber(strPhoneNumber);
 
-					contact_infos.add(contactinfo);
+					contact_infos.add(ContactInfo);
 					
 				}
 				cursor.close();

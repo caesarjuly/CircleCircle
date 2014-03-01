@@ -1,37 +1,29 @@
 package ustc.wth.circlecircle;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import global.Uris;
-import entity.Contactinfo;
+import entity.ContactInfo;
 import service.ContactService;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class FragmentContact extends ListFragment{
 	//联系人信息
-	private List<Contactinfo> contact_infos;
+	private List<ContactInfo> contact_infos;
 	private ContactService contact;
 	private ImageButton imgbutton;
 	private Button button;
@@ -53,7 +45,7 @@ public class FragmentContact extends ListFragment{
 		
 		Uri uri = Uri.parse(Uris.Contacts_URI_ALL);
 
-		contact = new ContactService(this.getActivity(), uri);
+		contact = new ContactService(this.getActivity());
 
 		contact_infos = contact.getContactInfo();
 
@@ -138,7 +130,7 @@ public class FragmentContact extends ListFragment{
 
 
 			name.setText(contact_infos.get(position).getName());
-			number.setText(contact_infos.get(position).getPhoneNumber());
+			number.setText(contact_infos.get(position).getPhone());
 
 			return myview;
 		}

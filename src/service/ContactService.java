@@ -1,61 +1,69 @@
 package service;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.Contactinfo;
+import entity.ContactInfo;
 import entity.SmsInfo;
+
+import java.io.InputStream;
+
 import global.Uris;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 
+
 public class ContactService {
-	String contactName;
-	public String adb="123";
 	private Activity activity;
-	private Uri uri;
-	private String[] projection = new String[] { "_id", "num", "person" };
 	
-	public ContactService(Activity activity, Uri uri){
+	public ContactService(Activity activity){
 		this.activity = activity;
-		this.uri = uri;
 	}
 	
-	public String getNameByPhone(String phone){
+	public ContactInfo getContactByPhone(String phone){
+		ContactInfo ct = new ContactInfo();
+		String name;
 		ContentResolver resolver = activity.getContentResolver();
-		Cursor cursor = resolver.query(Uri.withAppendedPath(
-                PhoneLookup.CONTENT_FILTER_URI, phone), new String[] {
-                PhoneLookup._ID,
-                PhoneLookup.NUMBER,
-                PhoneLookup.DISPLAY_NAME,
-                PhoneLookup.TYPE, PhoneLookup.LABEL }, null, null,   null );
+		Uri uri = Uri.parse(Uris.Contacts_URI_PHONE + phone);  
+        Cursor cursor = resolver.query(uri, null, null,  
+                        null, null);  
         if(cursor.getCount()>0) {
         	cursor.moveToFirst();
-            String name = cursor.getString(cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME)); //获取姓名
-            return name;
-        }else{
-        	return null;
-        }
-       
+        	Long contactID = cursor.getLong(cursor.getColumnIndex("contact_id")); 
+            name = cursor.getString(cursor.getColumnIndex("display_name")); //获取姓名
+            uri = ContentUris.withAppendedId(  
+                    ContactsContract.Contacts.CONTENT_URI, contactID);  
+            InputStream input = ContactsContract.Contacts  
+                    .openContactPhotoInputStream(resolver, uri);  
+            Bitmap photo = BitmapFactory.decodeStream(input);
+            ct.setName(name);
+            ct.setPhoto(photo);
+            }
+        ct.setPhone(phone);
+        cursor.close();
+        return ct;
 	}
-	
 	
 	/**
 	 * 获取联系人的姓名和号码
 	 * Date:2014-2-23
 	 * 
 	 */
-	public List<Contactinfo> getContactInfo() {
+	public List<ContactInfo> getContactInfo() {
 		String strPhoneNumber="";
-		List<Contactinfo> contact_infos=new ArrayList<Contactinfo>();
+		List<ContactInfo> contact_infos=new ArrayList<ContactInfo>();
 		ContentResolver resolver = activity.getContentResolver();
 
-		Cursor cursor = resolver.query(uri, null,null,null, null);
+		Cursor cursor = resolver.query(Uri.parse(Uris.Contacts_URI_ALL), null,null,null, null);
 		
 		int contact_name = cursor.getColumnIndex("DISPLAY_NAME");
 		
@@ -65,7 +73,7 @@ public class ContactService {
 			if (cursor != null) {
 				while (cursor.moveToNext()) {
 					
-					Contactinfo contactinfo = new Contactinfo();
+					ContactInfo contactinfo = new ContactInfo();
 					contactinfo.setName(cursor.getString(contact_name));
 					
 					//得到电话号码 
@@ -88,7 +96,7 @@ public class ContactService {
 
 					   }  
 					//设置号码	
-					contactinfo.setPhoneNumber(strPhoneNumber);
+					contactinfo.setPhone(strPhoneNumber);
 
 					contact_infos.add(contactinfo);
 					
@@ -102,5 +110,4 @@ public class ContactService {
 				 Log.d("abc","kongzhizhen");
 				 return null;}
 			}
-		 
 }

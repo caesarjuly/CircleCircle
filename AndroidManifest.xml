@@ -35,6 +35,7 @@
             android:name=".Add_contact"
             android:label="@string/contatc_title" />
         
+        <activity android:name="ustc.wth.circlecircle.MessageThreadActivity" android:label="短信"/>
     </application>
 
 </manifest>
