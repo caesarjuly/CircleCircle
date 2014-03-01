@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/imageview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/xianjian04" >
-    </ImageView>
+
+    <ImageButton 
+        android:id="@+id/imgbut1"
+        android:layout_width="260dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="60dp"
+        android:src="@drawable/down_contact"
+        />
+    <ImageButton 
+        android:id="@+id/imgbut2"
+        android:layout_width="260dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="60dp"
+        android:layout_below="@+id/imgbut1"
+        android:src="@drawable/up_contact"
+        />
 
 </LinearLayout>
+
+

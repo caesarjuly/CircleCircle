@@ -1,13 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
 
-    <ImageView
-        android:id="@+id/imageview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/xianjian02" >
-    </ImageView>
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    xmlns:tools="http://schemas.android.com/tools"  
+    android:layout_width="match_parent"  
+    android:layout_height="match_parent"  
+    android:orientation="vertical" > 
+    <LinearLayout
+        android:id="@+id/contitle_layout"  
+        android:layout_width="fill_parent"  
+        android:layout_height="40dip"  
+        android:background="#000000"
+        android:layout_alignParentTop="true"  >
+        
+        <TextView 
+	        android:id="@+id/contatc_title"
+	        android:layout_width="wrap_content" 
+    		android:layout_height="40dp" 
+	        android:text="@string/contatc_title"
+	        android:gravity="center_vertical|left"
+	        android:layout_marginLeft="5dp"
+	        android:textSize="18sp"
+	        android:textColor="#FFFFFF"
+	        android:layout_weight="7" 
+        /> 
+        <ImageButton 
+            android:id="@+id/conadd_imgbut"
+            android:layout_width="wrap_content" 
+            android:layout_height="fill_parent"
+
+            android:src="@drawable/icon_more_nor"
+            android:layout_weight="1" 
+            />
+        <Button 
+            android:id="@+id/button32"
+            android:layout_width="wrap_content" 
+            android:layout_height="fill_parent"
+
+
+            android:layout_weight="1" 
+            />
+        
+    </LinearLayout>
+
+
+    <ListView  
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/contitle_layout"               
+    
+        android:drawSelectorOnTop="false" >
+    </ListView>  
+      
+      
+  
+</RelativeLayout>  
+
+

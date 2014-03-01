@@ -21,47 +21,84 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int home_btn_bg=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int icon_home_nor=0x7f020002;
-        public static final int icon_home_sel=0x7f020003;
-        public static final int icon_meassage_nor=0x7f020004;
-        public static final int icon_meassage_sel=0x7f020005;
-        public static final int icon_more_nor=0x7f020006;
-        public static final int icon_more_sel=0x7f020007;
-        public static final int icon_selfinfo_nor=0x7f020008;
-        public static final int icon_selfinfo_sel=0x7f020009;
-        public static final int icon_square_nor=0x7f02000a;
-        public static final int icon_square_sel=0x7f02000b;
-        public static final int maintab_toolbar_bg=0x7f02000c;
-        public static final int messagescenter_notice=0x7f02000d;
-        public static final int selector_tab_background=0x7f02000e;
-        public static final int tab_center_btn=0x7f02000f;
-        public static final int tab_contact_btn=0x7f020010;
-        public static final int tab_home_btn=0x7f020011;
-        public static final int tab_message_btn=0x7f020012;
-        public static final int xianjian01=0x7f020013;
-        public static final int xianjian02=0x7f020014;
-        public static final int xianjian03=0x7f020015;
-        public static final int xianjian04=0x7f020016;
+        public static final int down_contact=0x7f020000;
+        public static final int gray_line=0x7f020001;
+        public static final int gray_line2=0x7f020002;
+        public static final int home_btn_bg=0x7f020003;
+        public static final int ic_contact_picture=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int icon_home_nor=0x7f020006;
+        public static final int icon_home_sel=0x7f020007;
+        public static final int icon_meassage_nor=0x7f020008;
+        public static final int icon_meassage_sel=0x7f020009;
+        public static final int icon_more_nor=0x7f02000a;
+        public static final int icon_more_sel=0x7f02000b;
+        public static final int icon_selfinfo_nor=0x7f02000c;
+        public static final int icon_selfinfo_sel=0x7f02000d;
+        public static final int icon_square_nor=0x7f02000e;
+        public static final int icon_square_sel=0x7f02000f;
+        public static final int login=0x7f020010;
+        public static final int maintab_toolbar_bg=0x7f020011;
+        public static final int messagescenter_notice=0x7f020012;
+        public static final int selector_tab_background=0x7f020013;
+        public static final int tab_center_btn=0x7f020014;
+        public static final int tab_contact_btn=0x7f020015;
+        public static final int tab_home_btn=0x7f020016;
+        public static final int tab_message_btn=0x7f020017;
+        public static final int up_contact=0x7f020018;
+        public static final int xianjian01=0x7f020019;
+        public static final int xianjian02=0x7f02001a;
+        public static final int xianjian03=0x7f02001b;
+        public static final int xianjian04=0x7f02001c;
+        public static final int yun_down=0x7f02001d;
+        public static final int yun_up=0x7f02001e;
     }
     public static final class id {
-        public static final int action_settings=0x7f080006;
-        public static final int body=0x7f080003;
-        public static final int date=0x7f080004;
-        public static final int imageview=0x7f080001;
-        public static final int name=0x7f080002;
+        public static final int action_settings=0x7f080020;
+        public static final int addcon_button=0x7f080003;
+        public static final int body=0x7f08001e;
+        public static final int button32=0x7f080019;
+        public static final int conadd_imgbut=0x7f080018;
+        public static final int contact_name=0x7f080012;
+        public static final int contact_num=0x7f080013;
+        public static final int contact_textview=0x7f080002;
+        public static final int contatc_title=0x7f080017;
+        public static final int contitle_layout=0x7f080016;
+        public static final int date=0x7f08001f;
+        public static final int dfhg=0x7f080010;
+        public static final int edit_name=0x7f080008;
+        public static final int edit_num=0x7f08000f;
+        public static final int eidt_note=0x7f080009;
+        public static final int gray_line=0x7f08000c;
+        public static final int imageview=0x7f08001a;
+        public static final int img_contact=0x7f080011;
+        public static final int imgbut1=0x7f080014;
+        public static final int imgbut2=0x7f080015;
+        public static final int imgcont_button=0x7f080006;
+        public static final int imgview=0x7f08001b;
+        public static final int liner_layout=0x7f080004;
+        public static final int liner_layout3=0x7f080005;
+        public static final int liner_layout4=0x7f080007;
+        public static final int liner_layout5=0x7f08000a;
+        public static final int liner_layout6=0x7f08000d;
+        public static final int name=0x7f08001d;
         public static final int realtabcontent=0x7f080000;
-        public static final int textview=0x7f080005;
+        public static final int textview=0x7f08001c;
+        public static final int textview_phone=0x7f08000e;
+        public static final int textview_view1=0x7f08000b;
+        public static final int title_liner=0x7f080001;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int fragment_center=0x7f030001;
-        public static final int fragment_contact=0x7f030002;
-        public static final int fragment_home=0x7f030003;
-        public static final int fragment_message=0x7f030004;
-        public static final int message_line=0x7f030005;
-        public static final int tab_item_view=0x7f030006;
+        public static final int add_contact=0x7f030001;
+        public static final int contact_line=0x7f030002;
+        public static final int fragment_center=0x7f030003;
+        public static final int fragment_contact=0x7f030004;
+        public static final int fragment_home=0x7f030005;
+        public static final int fragment_message=0x7f030006;
+        public static final int imgtext_button=0x7f030007;
+        public static final int message_line=0x7f030008;
+        public static final int tab_item_view=0x7f030009;
     }
     public static final class menu {
         public static final int main=0x7f070000;
@@ -69,7 +106,9 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
+        public static final int contatc_title=0x7f050004;
         public static final int hello_world=0x7f050002;
+        public static final int tongbu_contact=0x7f050003;
     }
     public static final class style {
         /** 

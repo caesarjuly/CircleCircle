@@ -1,18 +1,17 @@
 package ustc.wth.circlecircle;
 
 import global.Uris;
-
 import entity.SmsInfo;
 
 import java.util.List;
 
 import service.ContactService;
 import service.SmsService;
-
 import android.support.v4.app.ListFragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +36,7 @@ public class FragmentMessage extends ListFragment {
 		super.onCreate(savedInstanceState);
 		Uri uri = Uri.parse(Uris.SMS_URI_ALL);
 		sms = new SmsService(this.getActivity(), uri);
+		Log.d("abc","1234");
 		uri = Uri.parse(Uris.Contacts_URI_ALL);
 		contact = new ContactService(this.getActivity(), uri);
 		infos = sms.getSmsInfo();

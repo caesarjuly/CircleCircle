@@ -14,9 +14,12 @@
 
     <application
         android:allowBackup="true"
+        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        >
+
         <activity
             android:name="ustc.wth.circlecircle.MainActivity"
             android:label="@string/app_name" >
@@ -26,6 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        
+        <activity
+            android:name=".Add_contact"
+            android:label="@string/contatc_title" />
+        
     </application>
 
 </manifest>

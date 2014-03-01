@@ -35,5 +35,10 @@ public class Uris {
 	 * 单个联系人
 	 * #代表联系人id
 	 */
+	
+	public static final String Phone_CONTENT_URI = "content:// com.android.contacts/data/phones"; 
+	/**
+	 * 讀取聯繫人信息和號碼
+	 */
 	public static final String Contacts_URI_SINGLE = "content://com.android.contacts/contacts/#/data"; 
 }

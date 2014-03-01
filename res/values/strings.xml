@@ -4,5 +4,8 @@
     <string name="app_name">CircleCircle</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="tongbu_contact">同步联系人</string>
+    <string name="contatc_title">联系人</string>
+    
 
 </resources>
