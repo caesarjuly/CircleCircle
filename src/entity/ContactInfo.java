@@ -11,6 +11,25 @@ public class ContactInfo {
 	 * 电话
 	 */
 	private String phone;
+	/**
+	 * id
+	 */
+	private int id;
+	
+	
+	private ContactInfo cti;
+	
+	private String sortLetters;  //显示数据拼音的首字母
+	
+	
+	public ContactInfo getCti() {
+		return cti;
+	}
+
+	public void setCti(ContactInfo cti) {
+		this.cti = cti;
+	}
+	
 	
 	public String getSortKey() {
 		return sortKey;
@@ -48,6 +67,21 @@ public class ContactInfo {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	
+	public void setId(int id){
+		this.id = id;	
+	}
+	
+	public int getId(){
+		return id;
+	}
+	
+	public String getSortLetters() {
+		return sortLetters;
+	}
+	public void setSortLetters(String sortLetters) {
+		this.sortLetters = sortLetters;
 	}
 
 }
