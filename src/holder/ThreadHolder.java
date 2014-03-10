@@ -10,7 +10,11 @@ public class ThreadHolder {
 	TextView messageCount;
 	TextView date;
 	TextView img;
+	TextView num;
+	TextView catalog;
 	ImageView notice;
+	
+	
 	public int getPosition() {
 		return position;
 	}
@@ -28,6 +32,12 @@ public class ThreadHolder {
 	}
 	public void setName(TextView name) {
 		this.name = name;
+	}
+	public void setNum(TextView num){
+		this.num=num;
+	}
+	public TextView getNum(){
+		return num;
 	}
 	public TextView getMessageCount() {
 		return messageCount;
@@ -47,6 +57,14 @@ public class ThreadHolder {
 	public void setImg(TextView img) {
 		this.img = img;
 	}
+	public TextView getCatalog() {
+		return catalog;
+	}
+	public void setCatalog(TextView catalog) {
+		this.catalog = catalog;
+	}
+	
+	
 	public ImageView getNotice() {
 		return notice;
 	}

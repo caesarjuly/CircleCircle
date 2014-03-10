@@ -1,15 +1,15 @@
 package service;
 
-
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import entity.ContactInfo;
-import entity.SmsInfo;
 
-import java.io.InputStream;
 
-import global.Uris;
+import ustc.wth.circlecircle.CharacterParser;
+import ustc.wth.circlecircle.SortModel;
+import buffer.ContactBuffer;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -18,16 +18,134 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
+import entity.ContactInfo;
+import global.Uris;
 
 
-public class ContactService {
+public class ContactService{
 	private Activity activity;
+	private Uri uri;
+	private List<ContactInfo> contactinfos;
+	private HashMap<String, String> contactBuffer;
+	private CharacterParser characterParser;
 	
-	public ContactService(Activity activity){
+	public ContactService(Activity activity) {
+		contactinfos = new ArrayList<ContactInfo>();
 		this.activity = activity;
+		this.uri = Uri.parse(Uris.Contacts_URI_RAW);
+		ContactBuffer cb = new ContactBuffer(activity);
+		contactBuffer = cb.getcontactBuffer();   //获取联系人buffer
 	}
+	
+	
+	
+	private List<SortModel> filledData(String [] date){
+		List<SortModel> mSortList = new ArrayList<SortModel>();
+		
+		for(int i=0; i<date.length; i++){
+			SortModel sortModel = new SortModel();
+			sortModel.setName(date[i]);
+			//汉字转换成拼音
+			String pinyin = characterParser.getSelling(date[i]);
+			String sortString = pinyin.substring(0, 1).toUpperCase();
+			
+			// 正则表达式，判断首字母是否是英文字母
+			if(sortString.matches("[A-Z]")){
+				sortModel.setSortLetters(sortString.toUpperCase());
+			}else{
+				sortModel.setSortLetters("#");
+			}
+			
+			mSortList.add(sortModel);
+		}
+		return mSortList;
+		
+	}
+	
+	
+	
+	public List<ContactInfo> getContactInfo() {
+		ContentResolver resolver = activity.getContentResolver();
+		characterParser = CharacterParser.getInstance();
+		Cursor cursor = resolver.query(Uri.parse(Uris.Contacts_URI_RAW),
+				null, null, null, null);
+		int id = cursor.getColumnIndex("contact_id");
+		int name = cursor.getColumnIndex("display_name"); //获取姓名
+		
+		if (cursor != null) {
+			while (cursor.moveToNext()) {
+				ContactInfo contactinfo = new ContactInfo();
+				contactinfo.setId(cursor.getInt(id));
+				contactinfo.setName(cursor.getString(name));
+				String named=cursor.getString(name);
+				//if(Integer.parseInt(named)==1);
+				if(named!=null)
+				
+				{String pinyin = characterParser.getSelling(named);
+					String sortString = pinyin.substring(0, 1).toUpperCase();
+					
+					// 正则表达式，判断首字母是否是英文字母
+					if(sortString.matches("[A-Z]")){
+						contactinfo.setSortLetters(sortString.toUpperCase());
+					}else{
+						contactinfo.setSortLetters("#");
+					}
+					
+					contactinfos.add(contactinfo);
+				}
+			}
+			cursor.close();
+		}
+		return contactinfos;
+	}
+	
+	/**
+	 *通过Id获取联系人电话号码 
+	 *Date:2014-3-5
+	 *Author：王东东
+	 */
+	public ContactInfo getContactById(int id,String cname){
+		ContactInfo ct = new ContactInfo();
+		String username="";
+		String TAG="abc";
+		String phoneNumber="";
+		username=cname;
+		int contact_id;
+		contact_id=id;
+		ContentResolver resolver = activity.getContentResolver();
+
+		 Cursor phones = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
+                 null, 
+                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + contact_id, 
+                 null, null);
+         int phoneIndex = 0;
+         if(phones.getCount() > 0) {
+             phoneIndex = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+         }
+         while(phones.moveToNext()) {
+             phoneNumber = phones.getString(phoneIndex);
+             System.out.println("number:"+phoneNumber);
+             Log.i(TAG,phoneNumber);    
+         }
+
+         
+			uri = ContentUris.withAppendedId(  
+					ContactsContract.Contacts.CONTENT_URI, contact_id); 
+			InputStream input = ContactsContract.Contacts  
+					.openContactPhotoInputStream(resolver, uri);  
+			Bitmap photo = BitmapFactory.decodeStream(input);
+			
+			String abc=phoneNumber;
+			ct.setPhoto(photo);
+			ct.setName(username);
+			ct.setPhone(phoneNumber);
+			phones.close();
+			return ct;
+		
+		
+	}
+	
 	
 	public ContactInfo getContactByPhone(String phone){
 		ContactInfo ct = new ContactInfo();
@@ -53,61 +171,7 @@ public class ContactService {
         return ct;
 	}
 	
-	/**
-	 * 获取联系人的姓名和号码
-	 * Date:2014-2-23
-	 * 
-	 */
-	public List<ContactInfo> getContactInfo() {
-		String strPhoneNumber="";
-		List<ContactInfo> contact_infos=new ArrayList<ContactInfo>();
-		ContentResolver resolver = activity.getContentResolver();
-
-		Cursor cursor = resolver.query(Uri.parse(Uris.Contacts_URI_ALL), null,null,null, null);
-		
-		int contact_name = cursor.getColumnIndex("DISPLAY_NAME");
-		
-		int contact_num = cursor.getColumnIndex("NUMBER");
-		
-		if(cursor.getCount()>0){ 
-			if (cursor != null) {
-				while (cursor.moveToNext()) {
-					
-					ContactInfo contactinfo = new ContactInfo();
-					contactinfo.setName(cursor.getString(contact_name));
-					
-					//得到电话号码 
-					// 获取联系人的ID号，在SQLite中的数据库ID  
-					String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-
-					        Cursor phone = resolver.query(  
-
-					        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,  
-
-					        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = "  
-
-					        + contactId, null, null);  
-
-					while (phone.moveToNext()) {  
-
-					strPhoneNumber = phone.getString( 
-
-					                 phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)); // 手机号码字段联系人可能不止一个  	  
-
-					   }  
-					//设置号码	
-					contactinfo.setPhone(strPhoneNumber);
-
-					contact_infos.add(contactinfo);
-					
-				}
-				cursor.close();
-			}
-		return contact_infos;
-	}
-		 else 
-			 {
-				 Log.d("abc","kongzhizhen");
-				 return null;}
-			}
+	
 }
+
+
