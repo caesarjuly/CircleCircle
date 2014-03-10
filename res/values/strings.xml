@@ -6,6 +6,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="tongbu_contact">同步联系人</string>
     <string name="contatc_title">联系人</string> 
-    <string name="photo">头像~</string>
-
+    <string name="message_title">短信</string>
+    <string name="photo">头像</string>
+	<string name="call">呼叫</string>
+	<string name="delete">删除</string>
 </resources>
