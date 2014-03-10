@@ -7,7 +7,7 @@ import java.util.List;
 import buffer.CanonicalBuffer;
 
 import entity.ContactInfo;
-import entity.ThreadInfo;
+import entity.ConversationInfo;
 import global.Uris;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -24,11 +24,11 @@ import android.net.Uri;
 public class SmsService {
 	private Activity activity;
 	private Uri uri;
-	private List<ThreadInfo> threads;
+	private List<ConversationInfo> threads;
 	private HashMap<String, String> canonicalBuffer;
 
 	public SmsService(Activity activity) {
-		threads = new ArrayList<ThreadInfo>();
+		threads = new ArrayList<ConversationInfo>();
 		this.activity = activity;
 		this.uri = Uri.parse(Uris.SMS_URI_ALL);
 		CanonicalBuffer cb = new CanonicalBuffer(activity);
@@ -39,7 +39,7 @@ public class SmsService {
 	 * Role:获取短信的各种信息 Date:2014-2-21
 	 * 
 	 */
-	public List<ThreadInfo> getSmsInfo() {
+	public List<ConversationInfo> getSmsInfo() {
 		ContentResolver resolver = activity.getContentResolver();
 		// 使用hack完成distinct查询，也可自己覆写provider实现
 		// Cursor cursor = resolver.query(uri, new String[] {
@@ -47,7 +47,7 @@ public class SmsService {
 		// "address", "body", "person", "date", "type", "read" }, // DISTINCT
 		// "address IS NOT NULL) GROUP BY (thread_id", // GROUP BY
 		// null, null);
-		Cursor cursor = resolver.query(Uri.parse(Uris.THREADS_URI_ALL),
+		Cursor cursor = resolver.query(Uri.parse(Uris.CONVERSATION_URI_ALL),
 				null, null, null, "date DESC");
 		int id = cursor.getColumnIndex("_id");
 		int date = cursor.getColumnIndex("date");
@@ -62,7 +62,7 @@ public class SmsService {
 		
 		if (cursor != null) {
 			while (cursor.moveToNext()) {
-				ThreadInfo thread = new ThreadInfo();
+				ConversationInfo thread = new ConversationInfo();
 				thread.setId(cursor.getInt(id));
 				thread.setDate(cursor.getLong(date));
 				thread.setError(cursor.getInt(error));
@@ -128,5 +128,11 @@ public class SmsService {
         }
         return addressResult;
     }
+	
+	public int deleteConversation(int id){
+		ContentResolver resolver = activity.getContentResolver();
+		int result = resolver.delete(Uri.parse(Uris.CONVERSATION_URI + id), null, null);
+		return result;
+	}
 	
 }

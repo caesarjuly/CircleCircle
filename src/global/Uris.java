@@ -14,7 +14,11 @@ public class Uris {
 	/**
 	 * 短信会话
 	 */
-	public static final String THREADS_URI_ALL = "content://mms-sms/conversations?simple=true";
+	public static final String CONVERSATION_URI = "content://mms-sms/conversations/";
+	/**
+	 * 简单短信会话
+	 */
+	public static final String CONVERSATION_URI_ALL = "content://mms-sms/conversations?simple=true";
 	/**
 	 * 获得所有会话联系人
 	 */

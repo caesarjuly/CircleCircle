@@ -2,7 +2,7 @@ package entity;
 
 import android.graphics.Bitmap;
 
-public class ThreadInfo {
+public class ConversationInfo {
 	/**
 	 * »á»°id
 	 */
@@ -56,7 +56,7 @@ public class ThreadInfo {
 	 */
 	private ContactInfo[] ctis;
 	
-	public ThreadInfo(){
+	public ConversationInfo(){
 		isMass = 0;
 	}
 	

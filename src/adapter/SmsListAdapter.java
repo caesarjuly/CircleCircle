@@ -22,34 +22,38 @@ import entity.*;
 import buffer.*;
 
 public class SmsListAdapter extends BaseAdapter {
-	private List<ThreadInfo> threads;
+	private List<ConversationInfo> conversations;
 	Context c;
 	private LayoutInflater layoutinflater;
 	private ContactBuffer contactBuffer;
 
-	public SmsListAdapter(Context c, List<ThreadInfo> threads) {
+	public SmsListAdapter(Context c, List<ConversationInfo> conversations) {
 		this.c = c;
-		this.threads = threads;
+		this.conversations = conversations;
 		this.contactBuffer = new ContactBuffer();
 		layoutinflater = LayoutInflater.from(c);
 	}
-
+	
+	public void removeConversation(ConversationInfo ci){
+		conversations.remove(ci);
+	}
+	
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return threads.size();
+		return conversations.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		return threads.get(position);
+		return conversations.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return threads.get(position).getId();
+		return conversations.get(position).getId();
 	}
 
 	@Override
@@ -73,13 +77,13 @@ public class SmsListAdapter extends BaseAdapter {
 			holder = (ThreadHolder) convertView.getTag();
 		}
 
-		holder.getBody().setText(threads.get(position).getSnippet());
+		holder.getBody().setText(conversations.get(position).getSnippet());
 
-		String time = TimeFormat.formatTimeStampString(c, threads.get(position).getDate());
+		String time = TimeFormat.formatTimeStampString(c, conversations.get(position).getDate());
 		holder.getDate().setText(time);
 
-		if (threads.get(position).getIsMass() == 0) { // 不是群发
-			ContactInfo cti = threads.get(position).getCti();
+		if (conversations.get(position).getIsMass() == 0) { // 不是群发
+			ContactInfo cti = conversations.get(position).getCti();
 			String phone = cti.getPhone();
 			holder.getName().setText(phone);
 			holder.getImg().setText(null);
@@ -87,7 +91,7 @@ public class SmsListAdapter extends BaseAdapter {
 
 		} else {
 			int i;
-			ContactInfo[] ctis = threads.get(position).getCtis();
+			ContactInfo[] ctis = conversations.get(position).getCtis();
 			String name = "";
 			for (i = 0; i < ctis.length - 1; i++) {
 				name += ctis[i].getPhone() + ",";
@@ -101,12 +105,12 @@ public class SmsListAdapter extends BaseAdapter {
 		}
 		holder.setPosition(position);
 		new ContactAsyncLoader(c, holder, position, 
-				threads.get(position), contactBuffer).execute(threads.get(position).getIsMass());
+				conversations.get(position), contactBuffer).execute(conversations.get(position).getIsMass());
 
-		int mc = threads.get(position).getMessageCount();
+		int mc = conversations.get(position).getMessageCount();
 		holder.getMessageCount().setText("(" + mc + ")");
 
-		int read = threads.get(position).getRead();
+		int read = conversations.get(position).getRead();
 		holder.getNotice().setVisibility(View.GONE);
 		if (read == 0) {
 			holder.getNotice().setVisibility(View.VISIBLE);

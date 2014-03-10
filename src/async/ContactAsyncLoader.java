@@ -12,17 +12,17 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import entity.ContactInfo;
-import entity.ThreadInfo;
+import entity.ConversationInfo;
 
 public class ContactAsyncLoader extends AsyncTask<Integer, Void, ContactInfo[]>{
 		private ContactService cts;
 		private ThreadHolder holder;
 		private int position;
-		private ThreadInfo thread;
+		private ConversationInfo thread;
 		private HashMap<String, ContactInfo> cb;
 		Context ctx;
 
-		public ContactAsyncLoader(Context context, ThreadHolder holder, int position, ThreadInfo thread, ContactBuffer cb) {
+		public ContactAsyncLoader(Context context, ThreadHolder holder, int position, ConversationInfo thread, ContactBuffer cb) {
 			this.holder = holder;
 			this.position = position;
 			this.ctx = context;
