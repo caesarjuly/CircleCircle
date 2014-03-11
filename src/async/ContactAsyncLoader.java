@@ -14,94 +14,84 @@ import android.os.AsyncTask;
 import entity.ContactInfo;
 import entity.ConversationInfo;
 
-public class ContactAsyncLoader extends AsyncTask<Integer, Void, ContactInfo[]>{
-		private ContactService cts;
-		private ConversationHolder holder;
-		private int position;
-		private ConversationInfo thread;
-		private HashMap<String, ContactInfo> cb;
-		Context ctx;
+public class ContactAsyncLoader extends AsyncTask<Integer, Void, ContactInfo[]> {
+	private ContactService cts;
+	private ConversationHolder holder;
+	private int position;
+	private ConversationInfo conversation;
+	Context ctx;
 
-		public ContactAsyncLoader(Context context, ConversationHolder holder, int position, ConversationInfo thread, ContactBuffer cb) {
-			this.holder = holder;
-			this.position = position;
-			this.ctx = context;
-			this.thread = thread;
-			this.cb = cb.getBuffer();
-			cts = new ContactService((Activity) ctx);
-		}
+	public ContactAsyncLoader(Context context, ConversationHolder holder,
+			int position, ConversationInfo conversation) {
+		this.holder = holder;
+		this.position = position;
+		this.ctx = context;
+		this.conversation = conversation;
+		cts = new ContactService((Activity) ctx);
+	}
 
-		@Override
-		protected ContactInfo[] doInBackground(Integer... isMass) {
-			ContactInfo[] ctis;
-			String phone;
-			if(isMass[0] == 0){
-				ctis = new ContactInfo[1];
-				phone = thread.getCti().getPhone();
-				if(cb.get(phone) == null){
-					ctis[0] = cts.getContactByPhone(phone);
-					cb.put(phone, ctis[0]);
-				}else{
-					ctis[0] = cb.get(phone);
-				}
-				
-			}else{
-				ctis = thread.getCtis();
-				for(int i=0; i<ctis.length;i++){
-					phone = ctis[i].getPhone();
-					if(cb.get(phone) == null){
-						ctis[i] = cts.getContactByPhone(phone);
-						cb.put(phone, ctis[i]);
-					}else{
-						ctis[i] = cb.get(phone);
-					}
-				}
+	@Override
+	protected ContactInfo[] doInBackground(Integer... isMass) {
+		ContactInfo[] ctis;
+		String phone;
+		if (isMass[0] == 0) {
+			ctis = new ContactInfo[1];
+			phone = conversation.getCti().getPhone();
+			ctis[0] = cts.getContactByPhone(phone);
+			conversation.setCti(ctis[0]);
+		} else {
+			ctis = conversation.getCtis();
+			for (int i = 0; i < ctis.length; i++) {
+				phone = ctis[i].getPhone();
+				ctis[i] = cts.getContactByPhone(phone);
 			}
-			
-			return ctis;
+			conversation.setCtis(ctis);
 		}
+		conversation.setIsLoaded(true);
 
-		@Override
-		protected void onPostExecute(ContactInfo[] result) {
+		return ctis;
+	}
 
-			super.onPostExecute(result);
-			if (position == holder.getPosition()) {
-				if(thread.getIsMass() == 0){
-					if (result[0].getName() != null) {
-						holder.getName().setText(result[0].getName());
-						String sb = result[0].getName().substring(0, 1);
-						holder.getImg().setText(sb);
-						holder.getImg().setBackgroundColor(ctx.getResources()
-								.getColor(R.color.lightgray));
-					}
-					if(result[0].getPhoto() != null){
-						Drawable bd = new BitmapDrawable(ctx.getResources(),
-								result[0].getPhoto());
-						holder.getImg().setText(null);
-						holder.getImg().setBackground(bd);
-					}
-					
-				}else{
-					String name = "";
-					int i;
-					for (i = 0; i < result.length - 1; i++) {
-						if(result[i].getName() == null){
-							name += result[i].getPhone() + ",";
-						}else{
-							name += result[i].getName() + ",";			
-						}
+	@Override
+	protected void onPostExecute(ContactInfo[] result) {
 
-					}
-					if(result[i].getName() == null){
-						name += result[i].getPhone();
-					}else{
-						name += result[i].getName();			
-					}
-
-					holder.getName().setText(name);
+		super.onPostExecute(result);
+		if (position == holder.getPosition()) {
+			if (conversation.getIsMass() == 0) {
+				if (result[0].getName() != null) {
+					holder.getName().setText(result[0].getName());
+					String sb = result[0].getName().substring(0, 1);
+					holder.getImg().setText(sb);
+					holder.getImg().setBackgroundColor(
+							ctx.getResources().getColor(R.color.lightgray));
 				}
-				
-				
+				if (result[0].getPhoto() != null) {
+					Drawable bd = new BitmapDrawable(ctx.getResources(),
+							result[0].getPhoto());
+					holder.getImg().setText(null);
+					holder.getImg().setBackgroundDrawable(bd);
+				}
+
+			} else {
+				String name = "";
+				int i;
+				for (i = 0; i < result.length - 1; i++) {
+					if (result[i].getName() == null) {
+						name += result[i].getPhone() + ",";
+					} else {
+						name += result[i].getName() + ",";
+					}
+
+				}
+				if (result[i].getName() == null) {
+					name += result[i].getPhone();
+				} else {
+					name += result[i].getName();
+				}
+
+				holder.getName().setText(name);
 			}
+
 		}
+	}
 }

@@ -32,11 +32,22 @@
             android:src="@drawable/ic_menu_start_conversation" />
     </LinearLayout>
 
+    <utils.ClearEditText
+        android:id="@+id/message_filter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mestitle_layout"
+        android:background="@drawable/search_bar_edit_selector"
+        android:drawableLeft="@drawable/search_bar_icon_normal"
+        android:hint="请输入关键字"
+        android:singleLine="true"
+        android:textSize="20.0dip" />
+
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/mestitle_layout"
+        android:layout_below="@id/message_filter"
         android:drawSelectorOnTop="false" />
 
 </RelativeLayout>

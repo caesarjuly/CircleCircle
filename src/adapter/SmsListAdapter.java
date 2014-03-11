@@ -4,12 +4,16 @@ import holder.ConversationHolder;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import ustc.wth.circlecircle.R;
+import utils.ConvNameFormat;
 import utils.TimeFormat;
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,18 +29,25 @@ public class SmsListAdapter extends BaseAdapter {
 	private List<ConversationInfo> conversations;
 	Context c;
 	private LayoutInflater layoutinflater;
-	private ContactBuffer contactBuffer;
-
+	
 	public SmsListAdapter(Context c, List<ConversationInfo> conversations) {
 		this.c = c;
 		this.conversations = conversations;
-		this.contactBuffer = new ContactBuffer();
 		layoutinflater = LayoutInflater.from(c);
 	}
 	
 	public void removeConversation(ConversationInfo ci){
 		conversations.remove(ci);
 	}
+	
+	/**
+	 * notifyDataSetChanged，调用getview，显示改变后conversations的内容
+	 */
+	public void updateListView(List<ConversationInfo> list){
+		this.conversations = list;
+		notifyDataSetChanged();
+	}
+
 	
 	@Override
 	public int getCount() {
@@ -59,6 +70,7 @@ public class SmsListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ConversationHolder holder;
+		ConversationInfo convInfo = conversations.get(position);
 		if (convertView == null) {
 			convertView = layoutinflater.inflate(R.layout.message_line,
 					null);
@@ -76,41 +88,57 @@ public class SmsListAdapter extends BaseAdapter {
 		} else {
 			holder = (ConversationHolder) convertView.getTag();
 		}
+		
 
-		holder.getBody().setText(conversations.get(position).getSnippet());
+		holder.getBody().setText(convInfo.getSnippet());
 
-		String time = TimeFormat.formatTimeStampString(c, conversations.get(position).getDate());
+		String time = TimeFormat.formatTimeStampString(c, convInfo.getDate());
 		holder.getDate().setText(time);
-
-		if (conversations.get(position).getIsMass() == 0) { // 不是群发
-			ContactInfo cti = conversations.get(position).getCti();
+		
+		holder.setPosition(position);
+		if (convInfo.getIsMass() == 0) { // 不是群发
+			ContactInfo cti = convInfo.getCti();
 			String phone = cti.getPhone();
-			holder.getName().setText(phone);
+			
+			holder.getName().setText(phone);	//重置头像和名字，以防止重复显示
 			holder.getImg().setText(null);
 			holder.getImg().setBackgroundResource(R.drawable.ic_contact_picture);
-
-		} else {
-			int i;
-			ContactInfo[] ctis = conversations.get(position).getCtis();
-			String name = "";
-			for (i = 0; i < ctis.length - 1; i++) {
-				name += ctis[i].getPhone() + ",";
+			
+			if(convInfo.getIsLoaded()){  //被异步加载过		
+				if (cti.getName() != null) {
+					holder.getName().setText(cti.getName());
+					String sb = cti.getName().substring(0, 1);
+					holder.getImg().setText(sb);
+					holder.getImg().setBackgroundColor(c.getResources()
+							.getColor(R.color.lightgray));
+				}
+				if(cti.getPhoto() != null){
+					Drawable bd = new BitmapDrawable(c.getResources(),
+							cti.getPhoto());
+					holder.getImg().setText(null);
+					holder.getImg().setBackgroundDrawable(bd);
+				}
+			}else{
+				new ContactAsyncLoader(c, holder, position, 
+						convInfo).execute(convInfo.getIsMass());
 			}
-			name += ctis[i].getPhone();
-
+		} else {
+			ContactInfo[] ctis = convInfo.getCtis();
+			String name = ConvNameFormat.ConvNameFormat(ctis);
+			if(!convInfo.getIsLoaded()){
+				new ContactAsyncLoader(c, holder, position, 
+						convInfo).execute(convInfo.getIsMass());
+			}
 			holder.getName().setText(name);
 			holder.getImg().setText(null);
 			holder.getImg()
 					.setBackgroundResource(R.drawable.ic_contacts_picture);
 		}
-		holder.setPosition(position);
-		new ContactAsyncLoader(c, holder, position, 
-				conversations.get(position), contactBuffer).execute(conversations.get(position).getIsMass());
 
-		int mc = conversations.get(position).getMessageCount();
+		int mc = convInfo.getMessageCount();
 		holder.getMessageCount().setText("(" + mc + ")");
 
-		int read = conversations.get(position).getRead();
+		int read = convInfo.getRead();
 		holder.getNotice().setVisibility(View.GONE);
 		if (read == 0) {
 			holder.getNotice().setVisibility(View.VISIBLE);

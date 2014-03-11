@@ -1,8 +1,15 @@
 package ustc.wth.circlecircle;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import service.SmsService;
+import utils.CharacterParser;
+import utils.ClearEditText;
 import android.support.v4.app.ListFragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.net.Uri;
 import android.os.Bundle;
 import android.content.Intent;
@@ -22,6 +29,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import entity.ContactInfo;
 import entity.ConversationInfo;
 import adapter.*;
 
@@ -30,6 +38,7 @@ public class FragmentMessage extends ListFragment implements
 	private List<ConversationInfo> conversations;
 	private SmsService sms;
 	private PopupWindow pw;
+	private ClearEditText mClearEditText;
 	private SmsListAdapter smsListAdapter;
 
 	@Override
@@ -143,6 +152,75 @@ public class FragmentMessage extends ListFragment implements
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		getListView().setOnItemLongClickListener(this);
+		mClearEditText = (ClearEditText)getActivity().findViewById(R.id.message_filter);   //自定义ClearEditText
+		//为editatext添加响应事件
+		mClearEditText.addTextChangedListener(new TextWatcher(){
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+				//根据改变的内容来填充数据源
+				filterData(s.toString());
+				
+			}
+			
+		});
+		
 	}
+	
+	/**
+	 * 根据输入框中的值来过滤数据并更新ListView，目前可以按照拼音和名字来进行搜索，目前不支持全拼
+	 */
+	private void filterData(String filterStr){
+		String name = null;
+		CharacterParser characterParser = CharacterParser.getInstance();
+		//新建一个SortModel类型的List
+		List<ConversationInfo> filterDateList = new ArrayList<ConversationInfo>();
+
+		//判断EditText中是否为空
+		if(TextUtils.isEmpty(filterStr))
+		{
+			filterDateList = conversations;
+		}
+		else
+		{
+			filterDateList.clear();
+			for(ConversationInfo ConvInfo : conversations)
+			{
+				if(ConvInfo.getIsMass() == 0){
+					name = ConvInfo.getCti().getName();
+				}
+	
+				if(name!=null)
+				{
+					//返回字符中indexof（string）中字串string在父串中首次出现的位置，从0开始！没有返回-1；方便判断和截取字符串！
+
+					//if(name.indexOf(filterStr.toString()) != -1 || characterParser.getSelling(name).startsWith(filterStr.toString())){
+				    if(name.indexOf(filterStr.toString()) != -1 ||  characterParser.getSelling(name).startsWith(filterStr.toString()))
+				    {
+						//filterDateList中的数据改变
+
+						filterDateList.add(ConvInfo);
+					}
+				}
+			}
+		}
+		
+		smsListAdapter.updateListView(filterDateList);
+		}
 
 }
