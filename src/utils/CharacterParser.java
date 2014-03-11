@@ -4,7 +4,7 @@
  * @author	LuRuihui
  * @version	0.1
  */
-package ustc.wth.circlecircle;
+package utils;
 
 /**
  * Javaºº×Ö×ª»»ÎªÆ´Òô

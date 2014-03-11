@@ -7,8 +7,8 @@ import java.util.List;
 
 
 
-import ustc.wth.circlecircle.CharacterParser;
-import ustc.wth.circlecircle.SortModel;
+import utils.CharacterParser;
+import utils.Uris;
 import buffer.ContactBuffer;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -20,7 +20,6 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 import entity.ContactInfo;
-import global.Uris;
 
 
 public class ContactService{
@@ -36,34 +35,7 @@ public class ContactService{
 		this.uri = Uri.parse(Uris.Contacts_URI_RAW);
 		ContactBuffer cb = new ContactBuffer(activity);
 		contactBuffer = cb.getcontactBuffer();   //获取联系人buffer
-	}
-	
-	
-	
-	private List<SortModel> filledData(String [] date){
-		List<SortModel> mSortList = new ArrayList<SortModel>();
-		
-		for(int i=0; i<date.length; i++){
-			SortModel sortModel = new SortModel();
-			sortModel.setName(date[i]);
-			//汉字转换成拼音
-			String pinyin = characterParser.getSelling(date[i]);
-			String sortString = pinyin.substring(0, 1).toUpperCase();
-			
-			// 正则表达式，判断首字母是否是英文字母
-			if(sortString.matches("[A-Z]")){
-				sortModel.setSortLetters(sortString.toUpperCase());
-			}else{
-				sortModel.setSortLetters("#");
-			}
-			
-			mSortList.add(sortModel);
-		}
-		return mSortList;
-		
-	}
-	
-	
+	}	
 	
 	public List<ContactInfo> getContactInfo() {
 		ContentResolver resolver = activity.getContentResolver();

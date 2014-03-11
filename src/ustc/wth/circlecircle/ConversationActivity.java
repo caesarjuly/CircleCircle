@@ -3,7 +3,7 @@ package ustc.wth.circlecircle;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class MessageThreadActivity extends Activity {
+public class ConversationActivity extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		

@@ -1,5 +1,7 @@
-package ustc.wth.circlecircle;
+package utils;
 
+import ustc.wth.circlecircle.R;
+import ustc.wth.circlecircle.R.drawable;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;

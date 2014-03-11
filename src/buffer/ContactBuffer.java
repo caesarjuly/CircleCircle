@@ -1,9 +1,10 @@
 package buffer;
 
 import entity.ContactInfo;
-import global.Uris;
 
 import java.util.HashMap;
+
+import utils.Uris;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -25,23 +26,8 @@ public class ContactBuffer {
 		//构造一个哈希映射，对应_id和displayname
 		cd = new HashMap<String, String>();
 		this.activity = activity;
-		initBuffer();
 	}
 	
-	private void initBuffer() {
-		ContentResolver resolver = activity.getContentResolver();
-		Cursor cursor = resolver.query(
-				Uri.parse(Uris.Contacts_URI_RAW), null, null, null,
-				null);
-		if (cursor.getCount() > 0) {
-			while (cursor.moveToNext()) {
-				String id = cursor.getString(cursor.getColumnIndex("contact_id")); 
-				String display_name = cursor.getString(cursor.getColumnIndex("display_name"));
-				cd.put(id, display_name);
-				}
-		}
-		cursor.close();
-	}
 	
 	//获取联系人buffer
 	public HashMap<String, String> getcontactBuffer(){

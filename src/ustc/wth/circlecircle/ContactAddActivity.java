@@ -32,7 +32,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Add_contact extends Activity {
+public class ContactAddActivity extends Activity {
 	private ImageButton imgbutton;
 	private EditText edittext_name,edittext_phone,edittext_address,edittext_email;
 	private Button button;
@@ -98,7 +98,7 @@ public class Add_contact extends Activity {
 	        	insert();
 	        	//addContact();  	
 	        	//如果添加成功，显示“添加成功”
-	        	Toast.makeText(Add_contact.this,
+	        	Toast.makeText(ContactAddActivity.this,
 	    				"添加成功 ", Toast.LENGTH_SHORT)
 	    				.show();
 	        }  

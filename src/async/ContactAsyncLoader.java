@@ -3,7 +3,7 @@ package async;
 import java.util.HashMap;
 
 import buffer.ContactBuffer;
-import holder.ThreadHolder;
+import holder.ConversationHolder;
 import service.ContactService;
 import ustc.wth.circlecircle.R;
 import android.app.Activity;
@@ -16,13 +16,13 @@ import entity.ConversationInfo;
 
 public class ContactAsyncLoader extends AsyncTask<Integer, Void, ContactInfo[]>{
 		private ContactService cts;
-		private ThreadHolder holder;
+		private ConversationHolder holder;
 		private int position;
 		private ConversationInfo thread;
 		private HashMap<String, ContactInfo> cb;
 		Context ctx;
 
-		public ContactAsyncLoader(Context context, ThreadHolder holder, int position, ConversationInfo thread, ContactBuffer cb) {
+		public ContactAsyncLoader(Context context, ConversationHolder holder, int position, ConversationInfo thread, ContactBuffer cb) {
 			this.holder = holder;
 			this.position = position;
 			this.ctx = context;

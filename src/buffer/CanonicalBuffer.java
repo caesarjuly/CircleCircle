@@ -1,8 +1,9 @@
 package buffer;
 
-import global.Uris;
 
 import java.util.HashMap;
+
+import utils.Uris;
 
 import android.app.Activity;
 import android.content.ContentResolver;

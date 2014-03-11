@@ -56,7 +56,7 @@ public class FragmentMessage extends ListFragment implements
 		// 在Intent对象当中添加一个键值对
 		intent.putExtra("testIntent", "123");
 		// 设置Intent对象要启动的Activity
-		intent.setClass(getActivity(), MessageThreadActivity.class);
+		intent.setClass(getActivity(), ConversationActivity.class);
 		// 通过Intent对象启动另外一个Activity
 		startActivity(intent);
 	}

@@ -3,7 +3,7 @@ package holder;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ThreadHolder {
+public class ConversationHolder {
 	int position;
 	TextView body;
 	TextView name;

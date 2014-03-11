@@ -3,7 +3,7 @@ package async;
 import java.util.HashMap;
 
 import buffer.ContactBuffer;
-import holder.ThreadHolder;
+import holder.ConversationHolder;
 import service.ContactService;
 import ustc.wth.circlecircle.R;
 import android.app.Activity;
@@ -26,14 +26,14 @@ import entity.ContactInfo;
  */
 public class ImageAsyncLoader extends AsyncTask<Integer, Void, ContactInfo[]>{
 		private ContactService cts;
-		private ThreadHolder holder;
+		private ConversationHolder holder;
 		private int position;
 		private ContactInfo contact_info;
 		private HashMap<String, ContactInfo> cm;
 		Context ctx;
 		private String phone_number;
 
-		public ImageAsyncLoader(Context context, ThreadHolder holder, int position, ContactInfo contactinfo, ContactBuffer cb) {
+		public ImageAsyncLoader(Context context, ConversationHolder holder, int position, ContactInfo contactinfo, ContactBuffer cb) {
 			this.ctx=context;
 			this.holder = holder;
 			this.position = position;

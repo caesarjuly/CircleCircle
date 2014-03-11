@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import utils.Uris;
+
 import buffer.CanonicalBuffer;
 
 import entity.ContactInfo;
 import entity.ConversationInfo;
-import global.Uris;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -24,11 +25,11 @@ import android.net.Uri;
 public class SmsService {
 	private Activity activity;
 	private Uri uri;
-	private List<ConversationInfo> threads;
+	private List<ConversationInfo> conversations;
 	private HashMap<String, String> canonicalBuffer;
 
 	public SmsService(Activity activity) {
-		threads = new ArrayList<ConversationInfo>();
+		conversations = new ArrayList<ConversationInfo>();
 		this.activity = activity;
 		this.uri = Uri.parse(Uris.SMS_URI_ALL);
 		CanonicalBuffer cb = new CanonicalBuffer(activity);
@@ -89,11 +90,11 @@ public class SmsService {
 					thread.setCti(cti);
 				}
 				
-				threads.add(thread);
+				conversations.add(thread);
 			}
 			cursor.close();
 		}
-		return threads;
+		return conversations;
 	}
 
 	public String getUnreadNum() {

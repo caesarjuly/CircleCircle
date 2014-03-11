@@ -1,6 +1,6 @@
 package adapter;
 
-import holder.ThreadHolder;
+import holder.ConversationHolder;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -58,11 +58,11 @@ public class SmsListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ThreadHolder holder;
+		ConversationHolder holder;
 		if (convertView == null) {
 			convertView = layoutinflater.inflate(R.layout.message_line,
 					null);
-			holder = new ThreadHolder();
+			holder = new ConversationHolder();
 			holder.setBody((TextView) convertView.findViewById(R.id.body));
 			holder.setName((TextView) convertView.findViewById(R.id.name));
 			holder.setMessageCount((TextView) convertView
@@ -74,7 +74,7 @@ public class SmsListAdapter extends BaseAdapter {
 
 			convertView.setTag(holder);
 		} else {
-			holder = (ThreadHolder) convertView.getTag();
+			holder = (ConversationHolder) convertView.getTag();
 		}
 
 		holder.getBody().setText(conversations.get(position).getSnippet());

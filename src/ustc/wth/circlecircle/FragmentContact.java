@@ -10,7 +10,11 @@ import java.util.List;
 
 import entity.ContactInfo;
 import service.ContactService;
-import ustc.wth.circlecircle.SideBar.OnTouchingLetterChangedListener;
+import utils.CharacterParser;
+import utils.ClearEditText;
+import utils.PinyinComparator;
+import utils.SideBar;
+import utils.SideBar.OnTouchingLetterChangedListener;
 import adapter.ContactListAdapter;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -178,40 +182,7 @@ public class FragmentContact extends ListFragment {
 		pinyinComparator = new PinyinComparator();
 
 	}
-	
-	
-	/**
-	 * 为ListView填充数据
-	 * @param date
-	 * @return
-	 */
-	private List<SortModel> filledData(String [] date){
-		List<SortModel> mSortList = new ArrayList<SortModel>();
-		
-		for(int i=0; i<date.length; i++){
-			SortModel sortModel = new SortModel();
-			sortModel.setName(date[i]);
-			//汉字转换成拼音
-			String pinyin = characterParser.getSelling(date[i]);
-			String sortString = pinyin.substring(0, 1).toUpperCase();
-			
-			// 正则表达式，判断首字母是否是英文字母
-			if(sortString.matches("[A-Z]")){
-				sortModel.setSortLetters(sortString.toUpperCase());
-			}else{
-				sortModel.setSortLetters("#");
-			}
-			
-			mSortList.add(sortModel);
-		}
-		return mSortList;
-		
-	}
-	
-	
-	
-	
-	
+
 	
 	/**
 	 * 根据输入框中的值来过滤数据并更新ListView，目前可以按照拼音和名字来进行搜索，目前不支持全拼

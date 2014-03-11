@@ -1,6 +1,6 @@
 package adapter;
 
-import holder.ThreadHolder;
+import holder.ConversationHolder;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -76,12 +76,12 @@ public class ContactListAdapter extends BaseAdapter  implements SectionIndexer{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ThreadHolder holder;
+		ConversationHolder holder;
 		final ContactInfo mContent = contactinfos.get(position);
 		if (convertView == null) {
 			convertView = layoutinflater.inflate(R.layout.contact_line,
 					null);
-			holder = new ThreadHolder();
+			holder = new ConversationHolder();
 			//获取三个TextView
 			holder.setName((TextView) convertView.findViewById(R.id.contact_name));
 			holder.setNum((TextView) convertView.findViewById(R.id.contact_num));
@@ -90,7 +90,7 @@ public class ContactListAdapter extends BaseAdapter  implements SectionIndexer{
 
 			convertView.setTag(holder);
 		} else {
-			holder = (ThreadHolder) convertView.getTag();
+			holder = (ConversationHolder) convertView.getTag();
 		}
 		
 		int section = getSectionForPosition(position);
