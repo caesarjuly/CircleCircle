@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import async.ContactAsyncLoader;
+import async.ConvPhotoAsyncLoader;
 import entity.*;
 import buffer.*;
 
@@ -95,8 +95,9 @@ public class SmsListAdapter extends BaseAdapter {
 		String time = TimeFormat.formatTimeStampString(c, convInfo.getDate());
 		holder.getDate().setText(time);
 		
+		
 		holder.setPosition(position);
-		if (convInfo.getIsMass() == 0) { // 不是群发
+		if (!convInfo.getIsMass()) { // 不是群发
 			ContactInfo cti = convInfo.getCti();
 			String phone = cti.getPhone();
 			
@@ -104,14 +105,15 @@ public class SmsListAdapter extends BaseAdapter {
 			holder.getImg().setText(null);
 			holder.getImg().setBackgroundResource(R.drawable.ic_contact_picture);
 			
+			if (cti.getName() != null) {
+				holder.getName().setText(cti.getName());
+				String sb = cti.getName().substring(0, 1);
+				holder.getImg().setText(sb);
+				holder.getImg().setBackgroundColor(c.getResources()
+						.getColor(R.color.lightgray));
+			}
+			
 			if(convInfo.getIsLoaded()){  //被异步加载过		
-				if (cti.getName() != null) {
-					holder.getName().setText(cti.getName());
-					String sb = cti.getName().substring(0, 1);
-					holder.getImg().setText(sb);
-					holder.getImg().setBackgroundColor(c.getResources()
-							.getColor(R.color.lightgray));
-				}
 				if(cti.getPhoto() != null){
 					Drawable bd = new BitmapDrawable(c.getResources(),
 							cti.getPhoto());
@@ -119,15 +121,15 @@ public class SmsListAdapter extends BaseAdapter {
 					holder.getImg().setBackgroundDrawable(bd);
 				}
 			}else{
-				new ContactAsyncLoader(c, holder, position, 
-						convInfo).execute(convInfo.getIsMass());
+				new ConvPhotoAsyncLoader(c, holder, position, 
+						convInfo).execute();
 			}
 		} else {
 			ContactInfo[] ctis = convInfo.getCtis();
 			String name = ConvNameFormat.ConvNameFormat(ctis);
 			if(!convInfo.getIsLoaded()){
-				new ContactAsyncLoader(c, holder, position, 
-						convInfo).execute(convInfo.getIsMass());
+				new ConvPhotoAsyncLoader(c, holder, position, 
+						convInfo).execute();
 			}
 			holder.getName().setText(name);
 			holder.getImg().setText(null);

@@ -6,6 +6,7 @@ import java.util.List;
 import service.SmsService;
 import utils.CharacterParser;
 import utils.ClearEditText;
+import utils.ConvNameFormat;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -29,6 +30,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import async.ConvNameAsyncLoader;
 import entity.ContactInfo;
 import entity.ConversationInfo;
 import adapter.*;
@@ -53,6 +55,7 @@ public class FragmentMessage extends ListFragment implements
 		sms = new SmsService(this.getActivity());
 		conversations = sms.getSmsInfo();
 		smsListAdapter = new SmsListAdapter(this.getActivity(), conversations);
+		new ConvNameAsyncLoader(getActivity(), smsListAdapter, conversations).execute();
 		setListAdapter(smsListAdapter);
 		String unReadNum = sms.getUnreadNum(); // 获取新信息数目
 		Toast.makeText(getActivity(), "您有" + unReadNum + "条新消息！",
@@ -86,10 +89,13 @@ public class FragmentMessage extends ListFragment implements
 		TextView tvDel = (TextView) pv.findViewById(R.id.thread_delete);
 		ImageView ivLine = (ImageView) pv.findViewById(R.id.line);
 		
+		
 		ConversationInfo ci = conversations.get(arg2);
-		if(ci.getIsMass() == 1){
+		if(ci.getIsMass()){
 			tvCall.setVisibility(View.GONE);
 			ivLine.setVisibility(View.GONE);
+		}else{
+			 tvCall.setOnClickListener(new TelCallListener(ci.getCti().getPhone()));
 		}
 
 		// popwindow的长和宽的，必须要设置的，不然无法显示的
@@ -102,7 +108,6 @@ public class FragmentMessage extends ListFragment implements
 		View line = arg1;
         pw.showAsDropDown(line, line.getWidth()/2-200, -line.getHeight()-75);
          
-        tvCall.setOnClickListener(new TelCallListener(ci.getCti().getPhone()));
         tvDel.setOnClickListener(new ConDelListener(ci.getId(), ci));
 		return false;
 	}
@@ -186,7 +191,7 @@ public class FragmentMessage extends ListFragment implements
 	 * 根据输入框中的值来过滤数据并更新ListView，目前可以按照拼音和名字来进行搜索，目前不支持全拼
 	 */
 	private void filterData(String filterStr){
-		String name = null;
+		String search = null;
 		CharacterParser characterParser = CharacterParser.getInstance();
 		//新建一个SortModel类型的List
 		List<ConversationInfo> filterDateList = new ArrayList<ConversationInfo>();
@@ -201,16 +206,21 @@ public class FragmentMessage extends ListFragment implements
 			filterDateList.clear();
 			for(ConversationInfo ConvInfo : conversations)
 			{
-				if(ConvInfo.getIsMass() == 0){
-					name = ConvInfo.getCti().getName();
+				if(!ConvInfo.getIsMass()){
+					search = ConvInfo.getCti().getName();
+					if(search == null){
+						search += ConvInfo.getCti().getPhone();						
+					}
+				}else{
+					search = ConvNameFormat.ConvNameFormat(ConvInfo.getCtis());
 				}
 	
-				if(name!=null)
+				if(search!=null)
 				{
 					//返回字符中indexof（string）中字串string在父串中首次出现的位置，从0开始！没有返回-1；方便判断和截取字符串！
 
 					//if(name.indexOf(filterStr.toString()) != -1 || characterParser.getSelling(name).startsWith(filterStr.toString())){
-				    if(name.indexOf(filterStr.toString()) != -1 ||  characterParser.getSelling(name).startsWith(filterStr.toString()))
+				    if(search.indexOf(filterStr.toString()) != -1 ||  characterParser.getSelling(search).startsWith(filterStr.toString()))
 				    {
 						//filterDateList中的数据改变
 

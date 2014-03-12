@@ -46,7 +46,7 @@ public class ConversationInfo {
 	/**
 	 * 是否为群发，是为1，否为0
 	 */
-	private int isMass;
+	private boolean isMass;
 	/**
 	 * 是否异步加载过联系人信息，是为true，否为false
 	 */
@@ -61,7 +61,7 @@ public class ConversationInfo {
 	private ContactInfo[] ctis;
 	
 	public ConversationInfo(){
-		isMass = 0;
+		isMass = false;
 		isLoaded = false;
 	}
 	
@@ -140,11 +140,11 @@ public class ConversationInfo {
 	public void setCtis(ContactInfo[] ctis) {
 		this.ctis = ctis;
 	}
-	public int getIsMass() {
+	public boolean getIsMass() {
 		return isMass;
 	}
 
-	public void setIsMass(int isMass) {
+	public void setIsMass(boolean isMass) {
 		this.isMass = isMass;
 	}
 

@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
-import async.ContactAsyncLoader;
+import async.ConvPhotoAsyncLoader;
 import async.ImageAsyncLoader;
 import entity.*;
 import buffer.*;

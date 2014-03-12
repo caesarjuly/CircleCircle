@@ -119,9 +119,8 @@ public class ContactService{
 	}
 	
 	
-	public ContactInfo getContactByPhone(String phone){
-		ContactInfo ct = new ContactInfo();
-		String name;
+	public Bitmap getConvPhotoByPhone(String phone){
+		Bitmap photo = null;
 		ContentResolver resolver = activity.getContentResolver();
 		Uri uri = Uri.parse(Uris.Contacts_URI_PHONE + phone);  
         Cursor cursor = resolver.query(uri, null, null,  
@@ -129,18 +128,29 @@ public class ContactService{
         if(cursor.getCount()>0) {
         	cursor.moveToFirst();
         	Long contactID = cursor.getLong(cursor.getColumnIndex("contact_id")); 
-            name = cursor.getString(cursor.getColumnIndex("display_name")); //获取姓名
             uri = ContentUris.withAppendedId(  
                     ContactsContract.Contacts.CONTENT_URI, contactID);  
             InputStream input = ContactsContract.Contacts  
                     .openContactPhotoInputStream(resolver, uri);  
-            Bitmap photo = BitmapFactory.decodeStream(input);
-            ct.setName(name);
-            ct.setPhoto(photo);
+            photo = BitmapFactory.decodeStream(input);
             }
-        ct.setPhone(phone);
         cursor.close();
-        return ct;
+        return photo;
+	}
+	
+	public String getContactNameByPhone(String phone){
+		String name = null;
+		ContentResolver resolver = activity.getContentResolver();
+		Uri uri = Uri.parse(Uris.Contacts_URI_PHONE + phone);  
+        Cursor cursor = resolver.query(uri, new String[]{"display_name"}, null,  
+                        null, null);  
+        if(cursor.getCount()>0) {
+        	cursor.moveToFirst();
+            name = cursor.getString(cursor.getColumnIndex("display_name")); //获取姓名
+            }
+        
+        cursor.close();
+        return name;
 	}
 	
 	
