@@ -8,14 +8,22 @@ import java.util.List;
 
 
 
+
+
 import entity.ContactInfo;
+import entity.ConversationInfo;
 import service.ContactService;
+import ustc.wth.circlecircle.FragmentMessage.ConDelListener;
+import ustc.wth.circlecircle.FragmentMessage.TelCallListener;
 import utils.CharacterParser;
 import utils.ClearEditText;
 import utils.PinyinComparator;
 import utils.SideBar;
 import utils.SideBar.OnTouchingLetterChangedListener;
 import adapter.ContactListAdapter;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
@@ -24,16 +32,21 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 
-public class FragmentContact extends ListFragment {
+public class FragmentContact extends ListFragment implements OnItemLongClickListener {
 	private List<ContactInfo> contact_infos;
 	private ContactService contact;
 	private ClearEditText mClearEditText;
@@ -43,7 +56,7 @@ public class FragmentContact extends ListFragment {
 	private SideBar sideBar;
 	private TextView dialog;
 	private ListView lv;
-	
+	private PopupWindow pw;
 	/**
 	 * 根据拼音来排列ListView里面的数据类
 	 */
@@ -80,6 +93,8 @@ public class FragmentContact extends ListFragment {
 			sideBar = (SideBar) getActivity().findViewById(R.id.sidrbar);   //自定义的侧边栏
 			dialog = (TextView) getActivity().findViewById(R.id.dialog);    //单击侧边栏后显示的内容
 			sideBar.setTextView(dialog);
+			
+			getListView().setOnItemLongClickListener(this);
 			
 			//侧边栏添加监听事件
 			sideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
@@ -224,6 +239,68 @@ public class FragmentContact extends ListFragment {
 		//Collections.sort(filterDateList, pinyinComparator);
 		adapter.updateListView(filterDateList);
 		}
+	
+	
+	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		// TODO Auto-generated method stub
+		LinearLayout pv = (LinearLayout) LayoutInflater.from(
+				getActivity()).inflate(R.layout.pop_up_contact, null);
+
+		pw = new PopupWindow(getActivity());
+		pw.setContentView(pv);
+		Drawable dw = getResources().getDrawable(R.drawable.qzone_bg_copy);
+		pw.setBackgroundDrawable(dw);
+
+		TextView conEdit = (TextView) pv.findViewById(R.id.contact_edit);
+		TextView conDel = (TextView) pv.findViewById(R.id.contact_delete);
+		ImageView ivLine = (ImageView) pv.findViewById(R.id.line);
+		
+		
+		ContactInfo ci = contact_infos.get(arg2);
+
+
+		// popwindow的长和宽的，必须要设置的，不然无法显示的
+		pw.setWidth(400);
+		pw.setHeight(150);
+
+		pw.setOutsideTouchable(true);
+		pw.setFocusable(true);
+
+		View line = arg1;
+        pw.showAsDropDown(line, line.getWidth()/2-200, -line.getHeight()-75);
+        conEdit.setOnClickListener(new ConEditListener(ci.getId(), ci));
+        //conDel.setOnClickListener(new ConDelListener(ci.getId(), ci));
+		return false;
+	}
+
+
+	
+	class ConEditListener implements OnClickListener{
+		
+		private int id;
+		private ContactInfo ci;
+		ConEditListener(int id, ContactInfo ci){
+			this.ci = ci;
+			this.id = id;
+		}
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			
+
+			Bundle bundle = new Bundle();
+			Intent intent=new Intent();
+		    intent.setClass(getActivity().getApplicationContext(),ContactEditActivity.class);
+		    bundle.putSerializable("ContactInfo1", ci);
+            intent.putExtras(bundle);
+            pw.dismiss();
+            startActivity(intent);
+
+		}
+		
+	}
 
 	
 	
