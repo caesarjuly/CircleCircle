@@ -10,6 +10,7 @@ import java.util.List;
 
 
 
+
 import entity.ContactInfo;
 import entity.ConversationInfo;
 import service.ContactService;
@@ -36,6 +37,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -57,6 +59,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 	private TextView dialog;
 	private ListView lv;
 	private PopupWindow pw;
+	private ImageButton conadd_imgbut;
 	/**
 	 * 根据拼音来排列ListView里面的数据类
 	 */
@@ -93,8 +96,13 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 			sideBar = (SideBar) getActivity().findViewById(R.id.sidrbar);   //自定义的侧边栏
 			dialog = (TextView) getActivity().findViewById(R.id.dialog);    //单击侧边栏后显示的内容
 			sideBar.setTextView(dialog);
-			
+			conadd_imgbut= (ImageButton) getActivity().findViewById(R.id.conadd_imgbut);
 			getListView().setOnItemLongClickListener(this);
+			
+			//ImageButton添加监听事件
+			MyButtonClickListener onclickListener = new MyButtonClickListener();   
+	        
+	        conadd_imgbut.setOnClickListener(onclickListener);  
 			
 			//侧边栏添加监听事件
 			sideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
@@ -111,7 +119,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 			});
 	        
 			lv = getListView();   //获取默认list，添加点击事件
-			MyOnItemClickListener clickListener = new MyOnItemClickListener();   
+
 			
 			//lv.setOnItemLongClickListener(listener);
 			lv.setOnItemClickListener(new OnItemClickListener() {
@@ -170,9 +178,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 //	        
 //	        button.setText("新增");
 //
-//	        MyButtonClickListener clickListener = new MyButtonClickListener();   
-//	        
-//	        button.setOnClickListener(clickListener);  
+	        
 
 	    }  
 	 
@@ -186,7 +192,20 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 			}  
 	    }  
 
-	 
+	  class MyButtonClickListener implements OnClickListener   
+	    {  
+	        public void onClick(View v)   
+	        {  
+      	
+	        	Intent intent=new Intent();
+
+				intent.setClass(getActivity(), ContactAddActivity.class);
+
+				startActivity(intent);
+
+	        	
+	        }  
+	    }  
 	 
 	 
 	
@@ -288,7 +307,6 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			
 
 			Bundle bundle = new Bundle();
 			Intent intent=new Intent();

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import android.graphics.Bitmap;
 
+
 public class ContactInfo implements Serializable {
 	/**
 	 * 联系人的姓名

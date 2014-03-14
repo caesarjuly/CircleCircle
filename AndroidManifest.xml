@@ -38,6 +38,10 @@
             android:name=".ContactAddActivity"
             android:label="@string/contatc_title" />
         
+        <activity
+            android:name=".ContactEditActivity"
+             />
+        
         <activity android:name="ustc.wth.circlecircle.ConversationActivity" android:label="会话详细信息"/>
     </application>
 
