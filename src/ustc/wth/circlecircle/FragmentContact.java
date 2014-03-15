@@ -3,29 +3,24 @@ package ustc.wth.circlecircle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-
-
-
-
-
-
-
 import entity.ContactInfo;
-import entity.ConversationInfo;
 import service.ContactService;
-import ustc.wth.circlecircle.FragmentMessage.ConDelListener;
-import ustc.wth.circlecircle.FragmentMessage.TelCallListener;
 import utils.CharacterParser;
 import utils.ClearEditText;
 import utils.PinyinComparator;
 import utils.SideBar;
 import utils.SideBar.OnTouchingLetterChangedListener;
 import adapter.ContactListAdapter;
+import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.RawContacts;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -36,25 +31,21 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 
-public class FragmentContact extends ListFragment implements OnItemLongClickListener {
+public class FragmentContact extends ListFragment implements OnItemLongClickListener, OnItemClickListener {
 	private List<ContactInfo> contact_infos;
 	private ContactService contact;
 	private ClearEditText mClearEditText;
-	private EditText editatext;
 	private ContactListAdapter adapter;
-	private TextView textview;
 	private SideBar sideBar;
 	private TextView dialog;
 	private ListView lv;
@@ -92,7 +83,6 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 	       
 	        characterParser = CharacterParser.getInstance();   //字符和拼音类
 			pinyinComparator = new PinyinComparator();
-			
 			sideBar = (SideBar) getActivity().findViewById(R.id.sidrbar);   //自定义的侧边栏
 			dialog = (TextView) getActivity().findViewById(R.id.dialog);    //单击侧边栏后显示的内容
 			sideBar.setTextView(dialog);
@@ -101,12 +91,10 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 			
 			//ImageButton添加监听事件
 			MyButtonClickListener onclickListener = new MyButtonClickListener();   
-	        
 	        conadd_imgbut.setOnClickListener(onclickListener);  
 			
 			//侧边栏添加监听事件
 			sideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
-				
 				@Override
 				public void onTouchingLetterChanged(String s) {
 					//该字母首次出现的位置
@@ -117,30 +105,31 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 					
 				}
 			});
-	        
-			lv = getListView();   //获取默认list，添加点击事件
-
 			
-			//lv.setOnItemLongClickListener(listener);
-			lv.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					//这里要利用adapter.getItem(position)来获取当前position所对应的对象
-					Toast.makeText(getActivity(), ((ContactInfo)adapter.getItem(position)).getName(), Toast.LENGTH_SHORT).show();
-				}
-			});
-				
-	        mClearEditText=(ClearEditText)getActivity().findViewById(R.id.filter_edit);   //自定义ClearEditText
-
+	        
+			//获取默认list，添加点击事件
+			lv = getListView();   
+			lv.setOnItemClickListener(this);
+//			lv.setOnItemClickListener(new OnItemClickListener() {
+//				@Override
+//				public void onItemClick(AdapterView<?> parent, View view,
+//						int position, long id) {
+//					//这里要利用adapter.getItem(position)来获取当前position所对应的对象
+//					//Toast.makeText(getActivity(), ((ContactInfo)adapter.getItem(position)).getName(), Toast.LENGTH_SHORT).show();
+//					Intent intent=new Intent();
+//					intent.setClass(getActivity(), ContactInfoActivity.class);
+//					startActivity(intent);	
+//				}
+//			});
+			
+			
 			contact = new ContactService(this.getActivity());
 			contact_infos = contact.getContactInfo();
-			
 			Collections.sort(contact_infos, pinyinComparator);     //对数据源按照拼音进行排序
 			adapter=new ContactListAdapter(this.getActivity(), contact_infos);
 			setListAdapter(adapter);
 			
+			mClearEditText=(ClearEditText)getActivity().findViewById(R.id.filter_edit);   //自定义ClearEditText
 			//为editatext添加响应事件
 			mClearEditText.addTextChangedListener(new TextWatcher(){
 
@@ -168,54 +157,45 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 				
 			});
 	        
-//	        contact = new ContactService(this.getActivity());
-//	        
-//			contact_infos = contact.getContactInfo();
-//			
-//			setListAdapter(new ContactListAdapter(this.getActivity(), contact_infos));
-//	     
-//	        button = (Button) getActivity().findViewById(R.id.button32);  
-//	        
-//	        button.setText("新增");
-//
-	        
-
 	    }  
 	 
-	  class MyOnItemClickListener implements OnItemClickListener   
-	    {  
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				Toast.makeText(getActivity(), ((ContactInfo)adapter.getItem(position)).getName(), Toast.LENGTH_SHORT).show();
-			}  
-	    }  
+	 
+	 
+	 
+//	 //单击item跳转查看页面
+//	  class MyOnItemClickListener implements OnItemClickListener   
+//	    {  
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+//				// TODO Auto-generated method stub
+//				//Toast.makeText(getActivity(), ((ContactInfo)adapter.getItem(position)).getName(), Toast.LENGTH_SHORT).show();
+//				Intent intent=new Intent();
+//				intent.setClass(getActivity(), ContactInfoActivity.class);
+//				startActivity(intent);	
+//				
+//			}  
+//	    }  
 
+	  //单击添加联系人按钮跳转至新建联系人页面
 	  class MyButtonClickListener implements OnClickListener   
 	    {  
 	        public void onClick(View v)   
-	        {  
-      	
+	        {       	
 	        	Intent intent=new Intent();
-
 				intent.setClass(getActivity(), ContactAddActivity.class);
-
-				startActivity(intent);
-
-	        	
+				startActivity(intent);	        	
 	        }  
 	    }  
 	 
-	 
-	
+
 	 //初始化拼音类
-	private void initViews() {
-		characterParser = CharacterParser.getInstance();
-		
+	  private void initViews() {
+		  
+		characterParser = CharacterParser.getInstance();	
 		pinyinComparator = new PinyinComparator();
 
-	}
+	  }
 
 	
 	/**
@@ -259,6 +239,20 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 		adapter.updateListView(filterDateList);
 		}
 	
+	//单击Item跳转至查看页面
+	public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+		
+		ContactInfo ci = (ContactInfo)adapter.getItem(position);
+		Bundle bundle = new Bundle();
+		Intent intent=new Intent();
+		intent.setClass(getActivity().getApplicationContext(),ContactInfoActivity.class);
+		bundle.putSerializable("ContactInfo1", ci);
+        intent.putExtras(bundle);
+		startActivity(intent);
+
+		 
+	 }
+	
 	
 	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
@@ -289,7 +283,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 		View line = arg1;
         pw.showAsDropDown(line, line.getWidth()/2-200, -line.getHeight()-75);
         conEdit.setOnClickListener(new ConEditListener(ci.getId(), ci));
-        //conDel.setOnClickListener(new ConDelListener(ci.getId(), ci));
+        conDel.setOnClickListener(new ConDelListener(ci.getId(), ci, arg2));
 		return false;
 	}
 
@@ -319,7 +313,60 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 		}
 		
 	}
+	
+	class ConDelListener implements OnClickListener{
+		
+		private int id;
+		private ContactInfo ci;
+		private int position;
+		ConDelListener(int id, ContactInfo ci,int position){
+			this.ci = ci;
+			this.id = id;
+			this.position=position;
+		}
 
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+           
+			pw.dismiss();
+            
+			delContact(ci.getName());
+			
+			contact_infos.remove(position);
+			
+			adapter.notifyDataSetChanged();
+			
+			getListView().invalidate();
+		}
+		
+	}
+
+	
+	//删除联系人
+	private void delContact(String name) {
+		ContentResolver resolver = this.getActivity().getContentResolver();
+
+		Cursor cursor = resolver.query(Data.CONTENT_URI,new String[] { Data.RAW_CONTACT_ID },
+
+		ContactsContract.Contacts.DISPLAY_NAME + "=?",new String[] { name }, null);
+
+		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
+		if (cursor.moveToFirst()) {
+		do {
+		long Id = cursor.getLong(cursor.getColumnIndex(Data.RAW_CONTACT_ID));
+
+		ops.add(ContentProviderOperation.newDelete(
+		ContentUris.withAppendedId(RawContacts.CONTENT_URI,Id)).build());
+		try {
+			resolver.applyBatch(ContactsContract.AUTHORITY, ops);
+		} 
+		catch (Exception e){}
+		} while (cursor.moveToNext());
+		cursor.close();
+		}
+		}
 	
 	
 	

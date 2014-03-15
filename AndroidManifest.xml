@@ -41,6 +41,9 @@
         <activity
             android:name=".ContactEditActivity"
              />
+        <activity
+            android:name=".ContactInfoActivity"
+             />
         
         <activity android:name="ustc.wth.circlecircle.ConversationActivity" android:label="会话详细信息"/>
     </application>
