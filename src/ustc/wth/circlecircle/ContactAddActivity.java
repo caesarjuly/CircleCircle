@@ -41,7 +41,6 @@ public class ContactAddActivity extends Activity {
 	private TextView textview1,textview2,textview3;
 	private TextView textview_phone,textview_email,textview_address,textview_im;
 	
-	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,17 +52,11 @@ public class ContactAddActivity extends Activity {
         edittext_email=(EditText)findViewById(R.id.edittext_email);
         edittext_address=(EditText)findViewById(R.id.edittext_address);
         edittext_im=(EditText)findViewById(R.id.edittext_im);
-        
-        imgbutton=(ImageButton)findViewById(R.id.confinish_imgbut);
-        
-        //添加自定义 
-        MyButtonClickListener clickListener = new MyButtonClickListener();   
-        
-        imgbutton.setOnClickListener(clickListener); 
-        
  
-        
-
+        //为添加联系人按钮添加监听事件        
+        imgbutton=(ImageButton)findViewById(R.id.confinish_imgbut);
+        MyButtonClickListener clickListener = new MyButtonClickListener();   
+        imgbutton.setOnClickListener(clickListener); 
 
     }
 	
@@ -144,15 +137,10 @@ public class ContactAddActivity extends Activity {
 		  .withValue("data4", edittext_address.getText().toString())
 		  .build();
 		  operations.add(op6);
-		  
-		  
-		  
+
 		  resolver.applyBatch("com.android.contacts", operations);
 
 		  }
-
-
-	
 
 
 }

@@ -18,7 +18,7 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="7"
             android:gravity="center_vertical|left"
-            android:text="@string/message_title"
+            android:text="@string/contatc_title"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
@@ -28,7 +28,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:background="@drawable/maintab_toolbar_bg"
-            android:src="@drawable/ic_menu_start_conversation" />
+            android:src="@drawable/sym_action_add" />
     </LinearLayout>
 
     <utils.ClearEditText
