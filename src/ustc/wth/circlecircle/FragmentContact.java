@@ -3,6 +3,7 @@ package ustc.wth.circlecircle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import entity.ContactInfo;
 import service.ContactService;
 import utils.CharacterParser;
@@ -14,6 +15,7 @@ import adapter.ContactListAdapter;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -331,7 +333,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
            
 			pw.dismiss();
             
-			delContact(ci.getName());
+			delContact(getActivity(),ci.getName());
 			
 			contact_infos.remove(position);
 			
@@ -343,31 +345,40 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 	}
 
 	
-	//É¾³ýÁªÏµÈË
-	private void delContact(String name) {
-		ContentResolver resolver = this.getActivity().getContentResolver();
+	private void delContact(Context context, String name) {
 
-		Cursor cursor = resolver.query(Data.CONTENT_URI,new String[] { Data.RAW_CONTACT_ID },
+		Cursor cursor = getActivity().getContentResolver().query(Data.CONTENT_URI,new String[] { Data.RAW_CONTACT_ID },
 
 		ContactsContract.Contacts.DISPLAY_NAME + "=?",new String[] { name }, null);
 
 		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-
+		ArrayList<ContentProviderOperation> ops1 = new ArrayList<ContentProviderOperation>();
 		if (cursor.moveToFirst()) {
 		do {
 		long Id = cursor.getLong(cursor.getColumnIndex(Data.RAW_CONTACT_ID));
-
 		ops.add(ContentProviderOperation.newDelete(
 		ContentUris.withAppendedId(RawContacts.CONTENT_URI,Id)).build());
+		ops1.add(ContentProviderOperation.newDelete(
+				ContentUris.withAppendedId(Data.CONTENT_URI,Id)).build());
 		try {
-			resolver.applyBatch(ContactsContract.AUTHORITY, ops);
+		getActivity().getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+		getActivity().getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops1);
 		} 
 		catch (Exception e){}
 		} while (cursor.moveToNext());
+		
 		cursor.close();
+
+		
 		}
 		}
+	//CR.delete(ContactsContract.RawContacts.CONTENT_URI,ContactsContract.RawContacts_id + "=" + delRawId);
 	
+	
+	ArrayList<ContentProviderOperation> ops =
+	          new ArrayList<ContentProviderOperation>();
+
+
 	
 	
 	}

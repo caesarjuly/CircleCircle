@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/contitle_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/maintab_toolbar_bg"
+        android:paddingLeft="10dp" >
+
+        <TextView
+            android:id="@+id/contactinfo_title"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical|left"
+            android:text="@string/contactinfo_title"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+    
+    <RelativeLayout
+        android:id="@+id/basic_info"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+
+       <ImageView
+           android:id="@+id/contact_photo"
+           android:layout_height="120dp"
+           android:layout_width="120dp"
+           android:layout_marginTop="5dp"
+           android:layout_marginLeft="10dp"
+       	   android:layout_marginRight="5dp"  
+       	   android:src="@drawable/add_photo" 
+           />
+       <TextView
+           android:id="@+id/textview_name"
+           android:layout_width="fill_parent"
+           android:layout_height="50dp"
+           android:layout_toRightOf="@id/contact_photo"
+           android:layout_alignTop="@id/contact_photo"
+           android:layout_marginTop="35dp"
+           android:layout_marginLeft="5dp"
+       	   android:layout_marginRight="10dp"
+       	   android:layout_gravity="center_vertical"
+       	   android:textSize="24sp"
+       	  />
+        
+       <TextView
+           android:id="@+id/textview_phone"
+           android:layout_width="fill_parent"
+           android:layout_height="20dp"
+           android:layout_marginTop="14dp"
+           android:layout_marginLeft="10dp"
+           android:layout_below="@id/contact_photo" 
+           android:text="@string/contact_phone"
+           android:textColor="@color/gray"
+           />
+       
+       <ImageView
+           android:id="@+id/imageview_line"
+           android:layout_width="fill_parent"
+           android:layout_height="5dp"
+           android:layout_marginLeft="10dp"
+           android:layout_marginRight="10dp"
+           android:layout_below="@id/textview_phone"
+           android:src="@drawable/gray_line"
+
+           />
+
+         <TextView 
+	        android:id="@+id/basicinfo_phone"
+	        android:layout_width="280dp"
+	        android:layout_height="40dp"
+	        android:layout_below="@id/imageview_line"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginTop="10dp"
+	        android:textSize="18sp"
+        />
+
+	    <ImageView
+	        android:id="@+id/gray_line3"
+	        android:layout_toRightOf="@id/basicinfo_phone"
+	        android:layout_width="2dp"
+	        android:layout_height="34dp"
+	        android:layout_below="@id/imageview_line"
+	        android:layout_marginTop="3dp"
+	        android:layout_marginRight="10dp"
+	        android:src="@drawable/gray_line3" 
+	        />
+	    
+	    <ImageView
+	        android:id="@+id/send_message"
+	        android:layout_toRightOf="@id/gray_line3"
+	        android:layout_width="fill_parent"
+	        android:layout_height="40dp"
+	        android:layout_below="@id/imageview_line"
+	        android:layout_marginRight="10dp"
+	        android:src="@drawable/sym_action_chat" 
+	        />
+	    
+
+	    <TextView 
+	        android:id="@+id/textview_email"
+	        android:layout_width="60dp"
+	        android:layout_height="20dp"
+	        android:layout_below="@id/basicinfo_phone"
+	        android:layout_alignLeft="@id/textview_phone"
+	        android:layout_marginTop="10dp"
+	        android:text="@string/contact_email"
+	        android:textColor="@color/gray"
+	        />
+	    
+	    <ImageView
+           android:id="@+id/imageview_line2"
+           android:layout_width="fill_parent"
+           android:layout_height="5dp"
+           android:layout_below="@id/textview_email"
+           android:layout_marginLeft="10dp"
+           android:layout_marginRight="10dp"
+           android:src="@drawable/gray_line"
+
+           />
+	    
+	    <TextView 
+	        android:id="@+id/basicinfo_email"
+	        android:layout_width="fill_parent"
+	        android:layout_height="40dp"
+	        android:layout_below="@id/imageview_line2"
+	        android:layout_alignLeft="@id/textview_email"
+	        android:layout_marginTop="10dp"
+	        android:textSize="18sp"
+	        />
+	    
+	    
+	    <TextView 
+	        android:id="@+id/textview_im"
+	        android:layout_width="60dp"
+	        android:layout_height="20dp"
+	        android:layout_below="@id/basicinfo_email"
+	        android:layout_alignLeft="@id/textview_email"
+	        android:layout_marginTop="10dp"
+	        android:text="@string/contact_im"
+	        android:textColor="@color/gray"
+	        />
+	    
+	    <ImageView
+           android:id="@+id/imageview_line3"
+           android:layout_width="fill_parent"
+           android:layout_height="5dp"
+           android:layout_below="@id/textview_im"
+           android:layout_marginLeft="10dp"
+           android:layout_marginRight="10dp"
+           android:src="@drawable/gray_line"
+
+           />
+	    
+	    <TextView 
+	        android:id="@+id/basicinfo_im"
+	        android:layout_width="fill_parent"
+	        android:layout_height="40dp"
+	        android:layout_below="@id/imageview_line3"
+	        android:layout_alignLeft="@id/textview_im"
+	        android:layout_marginTop="10dp"
+	        android:textSize="18sp"
+
+	        />
+	    
+	    
+	    <TextView 
+	        android:id="@+id/textview_address"
+	        android:layout_width="60dp"
+	        android:layout_height="20dp"
+	        android:layout_below="@id/basicinfo_im"
+	        android:layout_alignLeft="@id/textview_im"
+	        android:layout_marginTop="10dp"
+	        android:text="@string/contact_address"
+	        android:textColor="@color/gray"
+	        />
+	    
+	    <ImageView
+           android:id="@+id/imageview_line4"
+           android:layout_width="fill_parent"
+           android:layout_height="5dp"
+           android:layout_below="@id/textview_address"
+           android:layout_marginLeft="10dp"
+           android:layout_marginRight="10dp"
+           android:src="@drawable/gray_line"
+
+           />
+	    
+	    <TextView 
+	        android:id="@+id/basicinfo_address"
+	        android:layout_width="fill_parent"
+	        android:layout_height="40dp"
+	        android:layout_below="@id/imageview_line4"
+	        android:layout_alignLeft="@id/textview_address"
+	        android:layout_marginTop="10dp"
+	        android:textSize="18sp"
+
+	        />
+	    
+
+</RelativeLayout>
+
+    
+    
+   
+</LinearLayout>
