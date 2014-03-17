@@ -12,9 +12,10 @@ public final class R {
     }
     public static final class color {
         public static final int gray=0x7f040001;
+        public static final int lightergray=0x7f040003;
         public static final int lightgray=0x7f040002;
         public static final int red=0x7f040000;
-        public static final int white=0x7f040003;
+        public static final int white=0x7f040004;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -75,12 +76,12 @@ public final class R {
         public static final int yun_up=0x7f02002d;
     }
     public static final class id {
-        public static final int action_settings=0x7f09002e;
+        public static final int action_settings=0x7f090035;
         public static final int basic_info=0x7f090004;
         public static final int basicinfo=0x7f090007;
-        public static final int body=0x7f090028;
+        public static final int body=0x7f09001c;
         public static final int catalog=0x7f090013;
-        public static final int conadd_imgbut=0x7f09001b;
+        public static final int conadd_imgbut=0x7f090021;
         public static final int confinish_imgbut=0x7f090003;
         public static final int contact_delete=0x7f09002b;
         public static final int contact_edit=0x7f090029;
@@ -89,39 +90,46 @@ public final class R {
         public static final int contact_photo=0x7f090005;
         public static final int contactedit_title=0x7f090002;
         public static final int contitle_layout=0x7f090001;
-        public static final int date=0x7f090024;
-        public static final int dialog=0x7f09001d;
+        public static final int conversation_call=0x7f09002c;
+        public static final int conversation_delete=0x7f09002d;
+        public static final int date=0x7f090018;
+        public static final int dialog=0x7f090023;
         public static final int edittext_address=0x7f090012;
         public static final int edittext_email=0x7f09000c;
         public static final int edittext_im=0x7f090010;
         public static final int edittext_name=0x7f090006;
         public static final int edittext_phone=0x7f09000a;
-        public static final int filter_edit=0x7f09001c;
-        public static final int image=0x7f090023;
+        public static final int filter_edit=0x7f090022;
+        public static final int image=0x7f090017;
         public static final int image_textview=0x7f090014;
-        public static final int imageview=0x7f09001f;
+        public static final int imageview=0x7f090026;
         public static final int imageview_line=0x7f090008;
         public static final int imageview_line2=0x7f09000e;
-        public static final int imgbut1=0x7f090017;
-        public static final int imgbut2=0x7f090018;
-        public static final int imgview=0x7f090021;
+        public static final int imgbut1=0x7f09001d;
+        public static final int imgbut2=0x7f09001e;
+        public static final int imgview=0x7f090027;
         public static final int line=0x7f09002a;
-        public static final int messageCount=0x7f090027;
-        public static final int message_filter=0x7f090020;
-        public static final int message_title=0x7f09001a;
-        public static final int mestitle_layout=0x7f090019;
-        public static final int name=0x7f090026;
-        public static final int notice=0x7f090025;
+        public static final int messageCount=0x7f09001b;
+        public static final int message_filter=0x7f090025;
+        public static final int message_title=0x7f090020;
+        public static final int mestitle_layout=0x7f09001f;
+        public static final int name=0x7f09001a;
+        public static final int notice=0x7f090019;
         public static final int otherinfo=0x7f09000d;
         public static final int realtabcontent=0x7f090000;
-        public static final int sidrbar=0x7f09001e;
-        public static final int textview=0x7f090022;
+        public static final int sidrbar=0x7f090024;
+        public static final int sms_body=0x7f090034;
+        public static final int sms_date=0x7f090032;
+        public static final int sms_phone=0x7f090031;
+        public static final int sms_photo=0x7f09002f;
+        public static final int sms_status=0x7f090033;
+        public static final int sms_title=0x7f090030;
+        public static final int smstitle_layout=0x7f09002e;
+        public static final int textview=0x7f090028;
         public static final int textview_address=0x7f090011;
         public static final int textview_email=0x7f09000b;
         public static final int textview_im=0x7f09000f;
         public static final int textview_phone=0x7f090009;
-        public static final int thread_call=0x7f09002c;
-        public static final int thread_delete=0x7f09002d;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -129,16 +137,17 @@ public final class R {
         public static final int button_style=0x7f030002;
         public static final int contact_edit=0x7f030003;
         public static final int contact_line=0x7f030004;
-        public static final int fragment_center=0x7f030005;
-        public static final int fragment_contact=0x7f030006;
-        public static final int fragment_home=0x7f030007;
-        public static final int fragment_message=0x7f030008;
-        public static final int imgtext_button=0x7f030009;
-        public static final int message_dialog=0x7f03000a;
-        public static final int message_line=0x7f03000b;
-        public static final int pop_up_contact=0x7f03000c;
-        public static final int pop_up_menu=0x7f03000d;
-        public static final int tab_item_view=0x7f03000e;
+        public static final int conversation_line=0x7f030005;
+        public static final int fragment_center=0x7f030006;
+        public static final int fragment_contact=0x7f030007;
+        public static final int fragment_conversation=0x7f030008;
+        public static final int fragment_home=0x7f030009;
+        public static final int imgtext_button=0x7f03000a;
+        public static final int pop_up_contact=0x7f03000b;
+        public static final int pop_up_conversation=0x7f03000c;
+        public static final int sms=0x7f03000d;
+        public static final int sms_line=0x7f03000e;
+        public static final int tab_item_view=0x7f03000f;
     }
     public static final class menu {
         public static final int main=0x7f080000;
