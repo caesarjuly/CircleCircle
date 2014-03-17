@@ -35,18 +35,19 @@ import entity.ContactInfo;
 import entity.ConversationInfo;
 import adapter.*;
 
-public class FragmentMessage extends ListFragment implements
+public class FragmentConversation extends ListFragment implements
 		OnItemLongClickListener {
 	private List<ConversationInfo> conversations;
 	private SmsService sms;
 	private PopupWindow pw;
 	private ClearEditText mClearEditText;
-	private SmsListAdapter smsListAdapter;
+	private ConversationListAdapter convListAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_message, container, false);
+		return inflater.inflate(R.layout.fragment_conversation, container,
+				false);
 	}
 
 	@Override
@@ -54,20 +55,32 @@ public class FragmentMessage extends ListFragment implements
 		super.onCreate(savedInstanceState);
 		sms = new SmsService(this.getActivity());
 		conversations = sms.getSmsInfo();
-		smsListAdapter = new SmsListAdapter(this.getActivity(), conversations);
-		new ConvNameAsyncLoader(getActivity(), smsListAdapter, conversations).execute();
-		setListAdapter(smsListAdapter);
+		convListAdapter = new ConversationListAdapter(this.getActivity(),
+				conversations);
+		new ConvNameAsyncLoader(getActivity(), convListAdapter, conversations)
+				.execute();
+		setListAdapter(convListAdapter);
 		String unReadNum = sms.getUnreadNum(); // 获取新信息数目
 		Toast.makeText(getActivity(), "您有" + unReadNum + "条新消息！",
 				Toast.LENGTH_LONG).show();
 	}
 
 	public void onListItemClick(ListView parent, View v, int position, long id) {
+		ConversationInfo conv = conversations.get(position);
+		TextView tv = (TextView) v.findViewById(R.id.name);
+		Bundle b = new Bundle();
 		// 生成一个Intent对象
 		Intent intent = new Intent();
-		// 在Intent对象当中添加一个键值对
-		intent.putExtra("testIntent", "123");
-		// 设置Intent对象要启动的Activity
+		if(!conv.getIsMass()){
+			intent.putExtra("contactName", conv.getCti().getName());
+			intent.putExtra("phone", conv.getCti().getPhone());
+			b.putParcelable("photo", conversations.get(position).getCti()
+					.getPhoto());
+		}
+		intent.putExtra("id", conv.getId());
+		intent.putExtra("isMass", conv.getIsMass());
+		intent.putExtra("name", tv.getText());
+		intent.putExtras(b);
 		intent.setClass(getActivity(), ConversationActivity.class);
 		// 通过Intent对象启动另外一个Activity
 		startActivity(intent);
@@ -77,25 +90,25 @@ public class FragmentMessage extends ListFragment implements
 	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
 		// TODO Auto-generated method stub
-		LinearLayout pv = (LinearLayout) LayoutInflater.from(
-				getActivity()).inflate(R.layout.pop_up_menu, null);
+		LinearLayout pv = (LinearLayout) LayoutInflater.from(getActivity())
+				.inflate(R.layout.pop_up_conversation, null);
 
 		pw = new PopupWindow(getActivity());
 		pw.setContentView(pv);
 		Drawable dw = getResources().getDrawable(R.drawable.qzone_bg_copy);
 		pw.setBackgroundDrawable(dw);
 
-		TextView tvCall = (TextView) pv.findViewById(R.id.thread_call);
-		TextView tvDel = (TextView) pv.findViewById(R.id.thread_delete);
+		TextView tvCall = (TextView) pv.findViewById(R.id.conversation_call);
+		TextView tvDel = (TextView) pv.findViewById(R.id.conversation_delete);
 		ImageView ivLine = (ImageView) pv.findViewById(R.id.line);
-		
-		
+
 		ConversationInfo ci = conversations.get(arg2);
-		if(ci.getIsMass()){
+		if (ci.getIsMass()) {
 			tvCall.setVisibility(View.GONE);
 			ivLine.setVisibility(View.GONE);
-		}else{
-			 tvCall.setOnClickListener(new TelCallListener(ci.getCti().getPhone()));
+		} else {
+			tvCall.setOnClickListener(new TelCallListener(ci.getCti()
+					.getPhone()));
 		}
 
 		// popwindow的长和宽的，必须要设置的，不然无法显示的
@@ -106,17 +119,18 @@ public class FragmentMessage extends ListFragment implements
 		pw.setFocusable(true);
 
 		View line = arg1;
-        pw.showAsDropDown(line, line.getWidth()/2-200, -line.getHeight()-75);
-         
-        tvDel.setOnClickListener(new ConDelListener(ci.getId(), ci));
+		pw.showAsDropDown(line, line.getWidth() / 2 - 200,
+				-line.getHeight() - 75);
+
+		tvDel.setOnClickListener(new ConDelListener(ci.getId(), ci));
 		return false;
 	}
 
-	class TelCallListener implements OnClickListener{
-		
+	class TelCallListener implements OnClickListener {
+
 		private String phone;
-		
-		TelCallListener(String phone){
+
+		TelCallListener(String phone) {
 			this.phone = phone;
 		}
 
@@ -124,18 +138,20 @@ public class FragmentMessage extends ListFragment implements
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			pw.dismiss();
-			Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phone));  
-            startActivity(intent); 
-            pw= null;
+			Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"
+					+ phone));
+			startActivity(intent);
+			pw = null;
 		}
-		
+
 	}
-	
-	class ConDelListener implements OnClickListener{
-		
+
+	class ConDelListener implements OnClickListener {
+
 		private int id;
 		private ConversationInfo ci;
-		ConDelListener(int id, ConversationInfo ci){
+
+		ConDelListener(int id, ConversationInfo ci) {
 			this.ci = ci;
 			this.id = id;
 		}
@@ -145,92 +161,90 @@ public class FragmentMessage extends ListFragment implements
 			// TODO Auto-generated method stub
 			pw.dismiss();
 			sms.deleteConversation(id);
-			smsListAdapter.removeConversation(ci);
-			smsListAdapter.notifyDataSetChanged();
-            pw= null;
+			convListAdapter.removeConversation(ci);
+			convListAdapter.notifyDataSetChanged();
+			pw = null;
 		}
-		
+
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		getListView().setOnItemLongClickListener(this);
-		mClearEditText = (ClearEditText)getActivity().findViewById(R.id.message_filter);   //自定义ClearEditText
-		//为editatext添加响应事件
-		mClearEditText.addTextChangedListener(new TextWatcher(){
+		mClearEditText = (ClearEditText) getActivity().findViewById(
+				R.id.message_filter); // 自定义ClearEditText
+		// 为editatext添加响应事件
+		mClearEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				// TODO Auto-generated method stub
-				//根据改变的内容来填充数据源
+				// 根据改变的内容来填充数据源
 				filterData(s.toString());
-				
+
 			}
-			
+
 		});
-		
+
 	}
-	
+
 	/**
 	 * 根据输入框中的值来过滤数据并更新ListView，目前可以按照拼音和名字来进行搜索，目前不支持全拼
 	 */
-	private void filterData(String filterStr){
+	private void filterData(String filterStr) {
 		String search = null;
 		CharacterParser characterParser = CharacterParser.getInstance();
-		//新建一个SortModel类型的List
+		// 新建一个SortModel类型的List
 		List<ConversationInfo> filterDateList = new ArrayList<ConversationInfo>();
 
-		//判断EditText中是否为空
-		if(TextUtils.isEmpty(filterStr))
-		{
+		// 判断EditText中是否为空
+		if (TextUtils.isEmpty(filterStr)) {
 			filterDateList = conversations;
-		}
-		else
-		{
+		} else {
 			filterDateList.clear();
-			for(ConversationInfo ConvInfo : conversations)
-			{
-				if(!ConvInfo.getIsMass()){
+			for (ConversationInfo ConvInfo : conversations) {
+				if (!ConvInfo.getIsMass()) {
 					search = ConvInfo.getCti().getName();
-					if(search == null){
-						search += ConvInfo.getCti().getPhone();						
+					if (search == null) {
+						search += ConvInfo.getCti().getPhone();
 					}
-				}else{
+				} else {
 					search = ConvNameFormat.ConvNameFormat(ConvInfo.getCtis());
 				}
-	
-				if(search!=null)
-				{
-					//返回字符中indexof（string）中字串string在父串中首次出现的位置，从0开始！没有返回-1；方便判断和截取字符串！
 
-					//if(name.indexOf(filterStr.toString()) != -1 || characterParser.getSelling(name).startsWith(filterStr.toString())){
-				    if(search.indexOf(filterStr.toString()) != -1 ||  characterParser.getSelling(search).startsWith(filterStr.toString()))
-				    {
-						//filterDateList中的数据改变
+				if (search != null) {
+					// 返回字符中indexof（string）中字串string在父串中首次出现的位置，从0开始！没有返回-1；方便判断和截取字符串！
+
+					// if(name.indexOf(filterStr.toString()) != -1 ||
+					// characterParser.getSelling(name).startsWith(filterStr.toString())){
+					if (search.indexOf(filterStr.toString()) != -1
+							|| characterParser.getSelling(search).startsWith(
+									filterStr.toString())) {
+						// filterDateList中的数据改变
 
 						filterDateList.add(ConvInfo);
 					}
 				}
 			}
 		}
-		
-		smsListAdapter.updateListView(filterDateList);
-		}
+
+		convListAdapter.updateListView(filterDateList);
+	}
 
 }

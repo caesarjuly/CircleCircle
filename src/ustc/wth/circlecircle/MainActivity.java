@@ -20,7 +20,7 @@ public class MainActivity extends FragmentActivity {
 		private LayoutInflater layoutInflater;
 			
 		//定义数组来存放Fragment界面
-		private Class fragmentArray[] = {FragmentHome.class,FragmentMessage.class,FragmentContact.class,FragmentCenter.class};
+		private Class fragmentArray[] = {FragmentHome.class,FragmentConversation.class,FragmentContact.class,FragmentCenter.class};
 		
 		//定义数组来存放按钮图片
 		private int mImageViewArray[] = {R.drawable.tab_home_btn,R.drawable.tab_message_btn,R.drawable.tab_contact_btn,

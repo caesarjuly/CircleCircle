@@ -7,7 +7,7 @@
     android:orientation="horizontal" >
     
      <TextView 
-	        android:id="@+id/thread_call"
+	        android:id="@+id/conversation_call"
 	        android:layout_width="wrap_content" 
     		android:layout_height="wrap_content" 
 	        android:text="@string/call"
@@ -23,7 +23,7 @@
          />
      
      <TextView 
-	        android:id="@+id/thread_delete"
+	        android:id="@+id/conversation_delete"
 	        android:layout_width="wrap_content" 
     		android:layout_height="wrap_content" 
 	        android:text="@string/delete"

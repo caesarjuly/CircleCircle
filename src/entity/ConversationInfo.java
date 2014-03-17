@@ -1,8 +1,6 @@
 package entity;
 
-import android.graphics.Bitmap;
-
-public class ConversationInfo {
+public class ConversationInfo{
 	/**
 	 * »á»°id
 	 */
@@ -155,6 +153,7 @@ public class ConversationInfo {
 	public void setIsLoaded(boolean isLoaded) {
 		this.isLoaded = isLoaded;
 	}
+
 	
 
 }

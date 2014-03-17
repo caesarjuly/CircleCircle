@@ -3,7 +3,7 @@ package async;
 import java.util.List;
 
 import service.ContactService;
-import adapter.SmsListAdapter;
+import adapter.ConversationListAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,10 +13,10 @@ import entity.ConversationInfo;
 public class ConvNameAsyncLoader extends AsyncTask<Void, Void, Void> {
 	private ContactService cts;
 	private List<ConversationInfo> conversations;
-	private SmsListAdapter smsListAdapter;
+	private ConversationListAdapter smsListAdapter;
 	Context ctx;
 
-	public ConvNameAsyncLoader(Context context, SmsListAdapter smsListAdapter,
+	public ConvNameAsyncLoader(Context context, ConversationListAdapter smsListAdapter,
 			List<ConversationInfo> conversations) {
 		this.ctx = context;
 		this.conversations = conversations;
