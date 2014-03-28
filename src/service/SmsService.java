@@ -10,6 +10,7 @@ import buffer.CanonicalBuffer;
 
 import entity.ContactInfo;
 import entity.ConversationInfo;
+import entity.SmsInfo;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -25,11 +26,9 @@ import android.net.Uri;
 public class SmsService {
 	private Activity activity;
 	private Uri uri;
-	private List<ConversationInfo> conversations;
 	private HashMap<String, String> canonicalBuffer;
 
 	public SmsService(Activity activity) {
-		conversations = new ArrayList<ConversationInfo>();
 		this.activity = activity;
 		this.uri = Uri.parse(Uris.SMS_URI_ALL);
 		CanonicalBuffer cb = new CanonicalBuffer(activity);
@@ -41,6 +40,7 @@ public class SmsService {
 	 * 
 	 */
 	public List<ConversationInfo> getSmsInfo() {
+		List<ConversationInfo> conversations = new ArrayList<ConversationInfo>();
 		ContentResolver resolver = activity.getContentResolver();
 		// 使用hack完成distinct查询，也可自己覆写provider实现
 		// Cursor cursor = resolver.query(uri, new String[] {
@@ -61,7 +61,7 @@ public class SmsService {
 		int snippetCs = cursor.getColumnIndex("snippet_cs");
 		int type = cursor.getColumnIndex("type");
 		
-		if (cursor != null) {
+		if (cursor.getCount()>0) {
 			while (cursor.moveToNext()) {
 				ConversationInfo conversation = new ConversationInfo();
 				conversation.setId(cursor.getInt(id));
@@ -134,6 +134,39 @@ public class SmsService {
 		ContentResolver resolver = activity.getContentResolver();
 		int result = resolver.delete(Uri.parse(Uris.CONVERSATION_URI + id), null, null);
 		return result;
+	}
+	
+	public List<SmsInfo> getSmsByConvId(int Convid){
+		String[] projection = new String[] {   
+		         "_id",   
+		         "address",   
+		         "person",   
+		         "body",   
+		         "type",  
+		         "date"};
+		List<SmsInfo> smsList = new ArrayList<SmsInfo>();
+        ContentResolver resolver = activity.getContentResolver();
+            Cursor cursor = resolver.query(Uri.parse(Uris.SMS_URI_ALL), 
+                    projection, "thread_id=?", new String[]{Integer.toString(Convid)}, "date ASC");
+            int idColumn = cursor.getColumnIndex("_id");  
+            int addressColumn = cursor.getColumnIndex("address");
+            int personColumn = cursor.getColumnIndex("person");  
+            int bodyColumn = cursor.getColumnIndex("body");  
+            int dateColumn = cursor.getColumnIndex("date");  
+            int typeColumn = cursor.getColumnIndex("type");  
+            if(cursor.getCount()>0){
+                while (cursor.moveToNext()){
+                	SmsInfo sms = new SmsInfo();
+                	sms.setId(cursor.getLong(idColumn));
+                	sms.setAddress(cursor.getString(addressColumn));
+                	sms.setPerson(cursor.getString(personColumn));
+                	sms.setBody(cursor.getString(bodyColumn));
+                    sms.setDate(cursor.getLong(dateColumn));
+                    smsList.add(sms);
+                }
+            }
+            cursor.close();
+        return smsList;
 	}
 	
 }

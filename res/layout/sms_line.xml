@@ -2,33 +2,47 @@
 <!-- android:layout_alignParentBottom="true" -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="10dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingTop="10dp" >
-        
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:id="@+id/sms_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:orientation="horizontal" >
+
         <TextView
             android:id="@+id/sms_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="17sp" />
-        
+            android:textSize="12sp" />
+
         <ImageView
             android:id="@+id/sms_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/sms_date"
             android:focusable="false"
             android:src="@android:drawable/presence_online"
             android:visibility="gone" >
         </ImageView>
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/sms_body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/sms_date"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/sms_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sms_title"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_message_other_side_selected_pressed"
+        android:maxWidth="330dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="10dp"
+        android:paddingTop="20dp"
+        android:textColor="@color/black"
+        android:textSize="18sp" >
+    </TextView>
 
 </RelativeLayout>

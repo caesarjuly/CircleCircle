@@ -1,5 +1,11 @@
 package ustc.wth.circlecircle;
 
+import java.util.List;
+
+import service.SmsService;
+
+import entity.SmsInfo;
+import adapter.SmsListAdapter;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +20,8 @@ public class ConversationActivity extends ListActivity {
 	private int convId;
 	private boolean isMass;
 	private String name;
+	private SmsListAdapter smsListAdapter;
+	private SmsService sms;
 	private TextView sms_title;
 	private TextView sms_photo;
 	private TextView sms_phone;
@@ -53,5 +61,9 @@ public class ConversationActivity extends ListActivity {
         		sms_photo.setBackgroundDrawable(bd);
         	}
         }
+        sms = new SmsService(this);
+        List<SmsInfo> smsList =  sms.getSmsByConvId(convId);
+        smsListAdapter = new SmsListAdapter(this.getApplicationContext(), smsList);
+        setListAdapter(smsListAdapter);
     }
 }
