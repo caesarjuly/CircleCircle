@@ -3,13 +3,10 @@ package entity;
 import java.io.Serializable;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-
-public class ContactInfo implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ContactInfo implements Parcelable {
 	/**
 	 * 联系人的姓名
 	 */
@@ -22,19 +19,17 @@ public class ContactInfo implements Serializable {
 	 * id
 	 */
 	private int id;
-	
-	
+
 	private ContactInfo cti;
-	
-	private String sortLetters;  //显示数据拼音的首字母
-	
+
+	private String sortLetters; // 显示数据拼音的首字母
+
 	private String sortKey;
 	/**
 	 * 头像
 	 */
 	private Bitmap photo;
-	
-	
+
 	public ContactInfo getCti() {
 		return cti;
 	}
@@ -42,8 +37,7 @@ public class ContactInfo implements Serializable {
 	public void setCti(ContactInfo cti) {
 		this.cti = cti;
 	}
-	
-	
+
 	public String getSortKey() {
 		return sortKey;
 	}
@@ -51,7 +45,7 @@ public class ContactInfo implements Serializable {
 	public void setSortKey(String sortKey) {
 		this.sortKey = sortKey;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -59,7 +53,7 @@ public class ContactInfo implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public Bitmap getPhoto() {
 		return photo;
 	}
@@ -67,7 +61,7 @@ public class ContactInfo implements Serializable {
 	public void setPhoto(Bitmap photo) {
 		this.photo = photo;
 	}
-	
+
 	public String getPhone() {
 		return phone;
 	}
@@ -75,20 +69,52 @@ public class ContactInfo implements Serializable {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-	public void setId(int id){
-		this.id = id;	
+
+	public void setId(int id) {
+		this.id = id;
 	}
-	
-	public int getId(){
+
+	public int getId() {
 		return id;
 	}
-	
+
 	public String getSortLetters() {
 		return sortLetters;
 	}
+
 	public void setSortLetters(String sortLetters) {
 		this.sortLetters = sortLetters;
 	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel arg0, int arg1) {
+		// TODO Auto-generated method stub
+		arg0.writeInt(id);
+		arg0.writeString(name);
+		arg0.writeString(phone);
+
+	}
+
+	public static final Parcelable.Creator<ContactInfo> CREATOR = new Creator<ContactInfo>() {
+		@Override
+		public ContactInfo createFromParcel(Parcel source) {
+			ContactInfo ci = new ContactInfo();
+			ci.id = source.readInt();
+			ci.name = source.readString();
+			ci.phone = source.readString();
+			return ci;
+		}
+
+		@Override
+		public ContactInfo[] newArray(int size) {
+			return new ContactInfo[size];
+		}
+	};
 
 }

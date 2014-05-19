@@ -248,7 +248,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 		Bundle bundle = new Bundle();
 		Intent intent=new Intent();
 		intent.setClass(getActivity().getApplicationContext(),ContactInfoActivity.class);
-		bundle.putSerializable("ContactInfo1", ci);
+		bundle.putParcelable("ContactInfo1", ci);
         intent.putExtras(bundle);
 		startActivity(intent);
 
@@ -307,7 +307,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 			Bundle bundle = new Bundle();
 			Intent intent=new Intent();
 		    intent.setClass(getActivity().getApplicationContext(),ContactEditActivity.class);
-		    bundle.putSerializable("ContactInfo1", ci);
+		    bundle.putParcelable("ContactInfo1", ci);
             intent.putExtras(bundle);
             pw.dismiss();
             startActivity(intent);

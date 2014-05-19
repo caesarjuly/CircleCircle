@@ -1,11 +1,7 @@
 package utils;
 
-
 /**
- * class name：Uri
- * class description：定义公用的Uri资源
- * PS： 
- * Date:2014-2-21
+ * class name：Uri class description：定义公用的Uri资源 PS： Date:2014-2-21
  * 
  * @version 1.00
  * @author YF
@@ -44,31 +40,33 @@ public class Uris {
 	 */
 	public static final String SMS_URI_DRAFT = "content://sms/draft";
 	/**
+	 * 发送与接收的广播
+	 */
+	public static final String SENT_SMS_ACTION = "SENT_SMS_ACTION";
+	public static final String DELIVERED_SMS_ACTION = "DELIVERED_SMS_ACTION";
+	/**
 	 * 所有联系人
 	 */
-	public static final String Contacts_URI_ALL = "content://com.android.contacts/contacts"; 
+	public static final String Contacts_URI_ALL = "content://com.android.contacts/contacts";
 	/**
-	 * 单个联系人
-	 * #代表联系人id
+	 * 单个联系人 #代表联系人id
 	 */
-	public static final String Phone_CONTENT_URI = "content:// com.android.contacts/data/phones"; 
+	public static final String Phone_CONTENT_URI = "content:// com.android.contacts/data/phones";
 	/**
 	 * 讀取聯繫人信息和號碼
 	 */
-	public static final String Contacts_URI_SINGLE = "content://com.android.contacts/contacts/#/data"; 
+	public static final String Contacts_URI_SINGLE = "content://com.android.contacts/contacts/#/data";
 
-	
-	//对raw_contacts表添加、删除、更新操作：
-	public static final String Contacts_URI_RAW= "content://com.android.contacts/raw_contacts";
-	
-	//对data表添加、删除、更新操作：
+	// 对raw_contacts表添加、删除、更新操作：
+	public static final String Contacts_URI_RAW = "content://com.android.contacts/raw_contacts";
+
+	// 对data表添加、删除、更新操作：
 	public static final String Contacts_URI_DATA = "content://com.android.contacts/data";
-	
-	//根据email对data表查询
+
+	// 根据email对data表查询
 	public static final String Contacts_URI_EMAIL = "content://com.android.contacts/data/emails/filter/";
 
-	//根据电话号码对data表查询
+	// 根据电话号码对data表查询
 	public static final String Contacts_URI_PHONE = "content://com.android.contacts/data/phones/filter/";
-
 
 }

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- android:layout_alignParentBottom="true" -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sms_line"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:background="@color/white" >
 
     <LinearLayout
         android:id="@+id/sms_title"
@@ -22,6 +25,7 @@
             android:id="@+id/sms_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:focusable="false"
             android:src="@android:drawable/presence_online"
             android:visibility="gone" >
@@ -32,17 +36,16 @@
         android:id="@+id/sms_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sms_title"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/bg_message_other_side_selected_pressed"
         android:maxWidth="330dp"
         android:paddingBottom="20dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="20dp"
         android:textColor="@color/black"
         android:textSize="18sp" >
     </TextView>
 
-</RelativeLayout>
+</LinearLayout>
