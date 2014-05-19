@@ -54,7 +54,7 @@ public class CallService {
 				if(phoneToDate.containsKey(cursor.getString(phone))){
 					continue;
 				}else{
-					call.setName(cs.getContactNameByPhone(cursor.getString(phone)));
+					//call.setName(cs.getContactNameByPhone(cursor.getString(phone)));
 					call.setType(cursor.getInt(type));
 					//call.setPhoto(cs.getConvPhotoByPhone(cursor.getString(phone)));
 					calls.add(call);

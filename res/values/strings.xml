@@ -31,5 +31,8 @@
 	
 	<string name="mes_hint">请输入短信内容</string>
 	
+	<string name="center_title">个人中心</string>
+	<string name="send_sms_web">网页发短信：</string>
+	
 	
 </resources>

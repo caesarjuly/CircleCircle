@@ -62,7 +62,7 @@ OnItemLongClickListener {
 		callListAdapter = new CallListAdapter(this.getActivity(),
 				callList);
 		setListAdapter(callListAdapter);
-		//getActivity().getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI, true, new CallObserver(new Handler()));
+		getActivity().getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI, true, new CallObserver(new Handler()));
 		
 	}
 
@@ -115,8 +115,8 @@ OnItemLongClickListener {
 			// TODO Auto-generated method stub
 			pw.dismiss();
 			cs.deleteCall(ci.getPhone());
-			callListAdapter.removeCall(ci);
-			callListAdapter.notifyDataSetChanged();
+			//callListAdapter.removeCall(ci);
+		//	callListAdapter.notifyDataSetChanged();
 			pw = null;
 		}
 

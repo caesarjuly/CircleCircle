@@ -35,6 +35,7 @@ public class CallPhotoAsyncLoader extends AsyncTask<Void, Void, CallInfo> {
 
 	@Override
 	protected CallInfo doInBackground(Void...params) {
+		callInfo.setName(cts.getContactNameByPhone(callInfo.getPhone()));
 		callInfo.setPhoto(cts.getConvPhotoByPhone(callInfo.getPhone()));
 		callInfo.setLoaded(true);
 		return callInfo;
@@ -50,6 +51,11 @@ public class CallPhotoAsyncLoader extends AsyncTask<Void, Void, CallInfo> {
 					holder.getImg().setText(null);
 					holder.getImg().setBackgroundDrawable(bd);
 				}
+				if(result.getName()!=null){
+					holder.getName().setText(result.getName());
+					holder.getBody().setText(result.getPhone());
+				}
+				
 
 			}
 	}
