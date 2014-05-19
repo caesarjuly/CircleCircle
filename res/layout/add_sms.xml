@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/white"
+    android:focusable="true"  
+	android:focusableInTouchMode="true">
+
+    <LinearLayout
+        android:id="@+id/smstitle_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/maintab_toolbar_bg"
+        android:paddingLeft="10dp" >
+
+        <TextView
+            android:id="@+id/addsms_title"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="7"
+            android:gravity="center_vertical|left"
+            android:text="@string/new_message"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp" 
+        android:layout_below="@id/smstitle_layout"
+        android:background="@drawable/border">
+
+        <TextView
+            android:id="@+id/receiver"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="18dp"
+            android:textSize="20sp"
+            android:text="@string/receiver" />
+
+        <utils.ChipsMultiAutoCompleteTextview
+            android:id="@+id/multiAutoCompleteTextView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/receiver"
+            android:ems="10" />
+    </RelativeLayout>
+    
+      <RelativeLayout 
+        android:id="@+id/smssend_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"  
+        android:orientation="horizontal" 
+        android:focusable="true"  
+		android:focusableInTouchMode="true">
+
+        <EditText
+            android:id="@+id/sms_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/sms_send"
+            android:hint="@string/mes_hint" />
+
+        <Button
+            android:id="@+id/sms_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"  
+            android:background="@drawable/ic_send_disable" />
+    </RelativeLayout >
+
+</RelativeLayout>

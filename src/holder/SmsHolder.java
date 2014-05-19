@@ -1,13 +1,30 @@
 package holder;
 
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SmsHolder {
+	LinearLayout sms_title;
+	LinearLayout sms_line;
 	TextView sms_date;
 	TextView sms_body;
 	ImageView sms_status;
 	
+
+	public LinearLayout getSms_title() {
+		return sms_title;
+	}
+	public void setSms_title(LinearLayout sms_title) {
+		this.sms_title = sms_title;
+	}
+	public LinearLayout getSms_line() {
+		return sms_line;
+	}
+	public void setSms_line(LinearLayout sms_line) {
+		this.sms_line = sms_line;
+	}
 	public TextView getSms_date() {
 		return sms_date;
 	}

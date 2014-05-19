@@ -24,7 +24,7 @@
             android:textSize="18sp" />
 
         <ImageButton
-            android:id="@+id/conadd_imgbut"
+            android:id="@+id/add_sms"
             android:layout_width="10dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
@@ -48,6 +48,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/message_filter"
-        android:drawSelectorOnTop="false" />
+        android:drawSelectorOnTop="false" 
+        android:transcriptMode="normal"/>
+    
+
 
 </RelativeLayout>

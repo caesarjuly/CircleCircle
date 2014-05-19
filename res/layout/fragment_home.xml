@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent" 
+    android:orientation="vertical" 
+    >
 
-    <ImageView
-        android:id="@+id/imageview"
+    <LinearLayout
+        android:id="@+id/mestitle_layout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/xianjian01" >
-    </ImageView>
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/maintab_toolbar_bg"
+        android:paddingLeft="10dp" >
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/message_title"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="7"
+            android:gravity="center_vertical|left"
+            android:text="@string/recent_call"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <utils.ClearEditText
+        android:id="@+id/message_filter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mestitle_layout"
+        android:background="@drawable/search_bar_edit_selector"
+        android:drawableLeft="@drawable/search_bar_icon_normal"
+        android:hint="请输入关键字"
+        android:singleLine="true"
+        android:textSize="20.0dip" />
+
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/message_filter"
+        android:drawSelectorOnTop="false" 
+        android:transcriptMode="normal"/>
+
+</RelativeLayout>

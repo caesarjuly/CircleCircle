@@ -2,13 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/smstitle_layout"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:layout_alignParentTop="true"
         android:background="@drawable/maintab_toolbar_bg"
         android:paddingLeft="10dp" >
 
@@ -25,10 +27,10 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp" 
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingLeft="10dp" >
 
             <TextView
                 android:id="@+id/sms_title"
@@ -50,6 +52,40 @@
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:drawSelectorOnTop="false" />
+        android:layout_above="@+id/smssend_layout"
+        android:layout_below="@+id/smstitle_layout"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:drawSelectorOnTop="false"
+        android:stackFromBottom="true"
+        android:transcriptMode="normal" />
+
+    <RelativeLayout
+        android:id="@+id/smssend_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
+
+        <EditText
+            android:id="@+id/sms_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/sms_send"
+            android:hint="@string/mes_hint" />
+
+        <Button
+            android:id="@+id/sms_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_send_disable" />
+    </RelativeLayout>
 
 </RelativeLayout>

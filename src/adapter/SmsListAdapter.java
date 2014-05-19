@@ -2,15 +2,24 @@ package adapter;
 
 import holder.SmsHolder;
 
+import java.util.HashMap;
 import java.util.List;
 import ustc.wth.circlecircle.R;
 import utils.TimeFormat;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.opengl.Visibility;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import entity.*;
@@ -19,10 +28,14 @@ public class SmsListAdapter extends BaseAdapter {
 	private List<SmsInfo> smsList;
 	Context c;
 	private LayoutInflater layoutinflater;
+	private boolean isMass;
+	private HashMap<String, String> phoneToName;
 
-	public SmsListAdapter(Context c, List<SmsInfo> smsList) {
+	public SmsListAdapter(Context c, List<SmsInfo> smsList, boolean isMass, HashMap<String, String> phoneToName) {
 		this.c = c;
 		this.smsList = smsList;
+		this.isMass = isMass;
+		this.phoneToName = phoneToName;
 		layoutinflater = LayoutInflater.from(c);
 	}
 
@@ -59,6 +72,8 @@ public class SmsListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			convertView = layoutinflater.inflate(R.layout.sms_line, null);
 			holder = new SmsHolder();
+			holder.setSms_line((LinearLayout) convertView.findViewById(R.id.sms_line));
+			holder.setSms_title((LinearLayout) convertView.findViewById(R.id.sms_title));
 			holder.setSms_body((TextView) convertView
 					.findViewById(R.id.sms_body));
 			holder.setSms_date((TextView) convertView
@@ -70,27 +85,64 @@ public class SmsListAdapter extends BaseAdapter {
 		} else {
 			holder = (SmsHolder) convertView.getTag();
 		}
+		holder.getSms_line().setGravity(Gravity.LEFT);
+		holder.getSms_title().setGravity(Gravity.LEFT);
+		holder.getSms_body().setBackgroundResource(R.drawable.bg_message_other_side_selected_pressed);
+		
 		if (smsInfo.getType() == 2) {
-			RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-			holder.getSms_body().setLayoutParams(
-					new RelativeLayout.LayoutParams(layoutParams));
-			holder.getSms_date().setLayoutParams(
-					new RelativeLayout.LayoutParams(layoutParams));
-			holder.getSms_status().setLayoutParams(
-					new RelativeLayout.LayoutParams(layoutParams));
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.WRAP_CONTENT,
+					LinearLayout.LayoutParams.WRAP_CONTENT);
+			layoutParams.gravity = Gravity.RIGHT;
+			holder.getSms_line().setGravity(Gravity.RIGHT);
+			holder.getSms_title().setGravity(Gravity.RIGHT);
+			holder.getSms_body().setBackgroundResource(R.drawable.bg_message_my_side_selected_pressed);
+			
+		}
+		String address = phoneToName.get(smsInfo.getAddress());
+		if(address == null){
+			address = smsInfo.getAddress();
+		}
+		switch(smsInfo.getStatus()){
+		case 64:
+			holder.getSms_status().setImageResource(R.drawable.about_load);
+			if(isMass){
+				holder.getSms_date().setText("正在发送给 " + address);
+			}else{
+				holder.getSms_date().setText("正在发送...");
+			}
+			holder.getSms_status().setVisibility(View.VISIBLE);
+			break;
+		case 128:
+			holder.getSms_status().setImageResource(R.drawable.ic_sms_mms_fail);
+			holder.getSms_status().setVisibility(View.VISIBLE);
+			break;
+		case 1:
+			holder.getSms_status().setImageResource(R.drawable.ic_sms_mms_delivered);
+			holder.getSms_status().setVisibility(View.VISIBLE);
+			break;
+		default:
+			holder.getSms_status().setVisibility(View.INVISIBLE);
+			String date = TimeFormat.formatTimeStampString(c, smsInfo.getDate());
+			if(isMass){
+				holder.getSms_date().setText(address + " " + date);
+			}else{
+				holder.getSms_date().setText(date);
+			}
+			break;
 		}
 		
-		String date = TimeFormat.formatTimeStampString(c, smsInfo.getDate());
-		holder.getSms_date().setText(date);
 		
 		holder.getSms_body().setText(smsInfo.getBody());
-		
 
 		return convertView;
 
 	}
 
+	public void removeSms(SmsInfo smsInfo) {
+		// TODO Auto-generated method stub
+		smsList.remove(smsInfo);
+	}
+	
+	
 }

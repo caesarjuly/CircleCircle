@@ -3,10 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:orientation="vertical" >
+   <LinearLayout
+        android:id="@+id/mestitle_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/maintab_toolbar_bg"
+        android:paddingLeft="10dp" >
 
+        <TextView
+            android:id="@+id/message_title"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="7"
+            android:gravity="center_vertical|left"
+            android:text="@string/center_title"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 
     <ImageButton 
         android:id="@+id/imgbut1"
+         android:orientation="horizontal"
         android:layout_width="260dp"
         android:layout_height="70dp"
         android:layout_marginTop="60dp"
@@ -15,12 +34,31 @@
         />
     <ImageButton 
         android:id="@+id/imgbut2"
+         android:orientation="horizontal"
         android:layout_width="260dp"
         android:layout_height="70dp"
         android:layout_marginLeft="60dp"
         android:layout_below="@+id/imgbut1"
         android:src="@drawable/up_contact"
         />
+   <LinearLayout
+       android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="horizontal"
+    android:gravity="center_horizontal"
+       >
+    <TextView 
+        android:id="@+id/send_sms_web"
+        android:text="@string/send_sms_web"
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content" 
+        android:textSize="20sp"
+        />
+     <Switch  
+        android:id="@+id/switch_test"  
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content" /> 
+        </LinearLayout>
 
 </LinearLayout>
 

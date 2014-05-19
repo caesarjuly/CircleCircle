@@ -31,7 +31,7 @@ public class SmsInfo {
 	/**
 	 * 会话id
 	 */
-	private String thread_id;
+	private long thread_id;
 	/**
 	 * 电话
 	 */
@@ -75,10 +75,10 @@ public class SmsInfo {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getThread_id() {
+	public long getThread_id() {
 		return thread_id;
 	}
-	public void setThread_id(String thread_id) {
+	public void setThread_id(long thread_id) {
 		this.thread_id = thread_id;
 	}
 	public String getAddress() {

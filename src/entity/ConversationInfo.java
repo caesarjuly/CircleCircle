@@ -4,7 +4,7 @@ public class ConversationInfo{
 	/**
 	 * 会话id
 	 */
-	private int id;
+	private Long id;
 	/**
 	 * 最后一条短信日期
 	 */
@@ -63,10 +63,10 @@ public class ConversationInfo{
 		isLoaded = false;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public long getDate() {

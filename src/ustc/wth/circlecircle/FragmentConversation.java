@@ -23,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,6 +43,7 @@ public class FragmentConversation extends ListFragment implements
 	private PopupWindow pw;
 	private ClearEditText mClearEditText;
 	private ConversationListAdapter convListAdapter;
+	private ImageButton add_sms;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +65,7 @@ public class FragmentConversation extends ListFragment implements
 		String unReadNum = sms.getUnreadNum(); // 获取新信息数目
 		Toast.makeText(getActivity(), "您有" + unReadNum + "条新消息！",
 				Toast.LENGTH_LONG).show();
+		
 	}
 
 	public void onListItemClick(ListView parent, View v, int position, long id) {
@@ -74,9 +77,12 @@ public class FragmentConversation extends ListFragment implements
 		if(!conv.getIsMass()){
 			intent.putExtra("contactName", conv.getCti().getName());
 			intent.putExtra("phone", conv.getCti().getPhone());
-			b.putParcelable("photo", conversations.get(position).getCti()
+			b.putParcelable("photo", conv.getCti()
 					.getPhoto());
+		}else{
+			b.putParcelableArray("contactInfos", conv.getCtis());
 		}
+		
 		intent.putExtra("id", conv.getId());
 		intent.putExtra("isMass", conv.getIsMass());
 		intent.putExtra("name", tv.getText());
@@ -84,6 +90,13 @@ public class FragmentConversation extends ListFragment implements
 		intent.setClass(getActivity(), ConversationActivity.class);
 		// 通过Intent对象启动另外一个Activity
 		startActivity(intent);
+		sms.markUnread(conv.getId());
+		for(int i=0;i<conversations.size();i++){
+			if(conversations.get(i).getId() == conv.getId()){
+				conversations.get(i).setRead(1);
+			}
+		}
+		convListAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -148,10 +161,10 @@ public class FragmentConversation extends ListFragment implements
 
 	class ConDelListener implements OnClickListener {
 
-		private int id;
+		private long id;
 		private ConversationInfo ci;
 
-		ConDelListener(int id, ConversationInfo ci) {
+		ConDelListener(long id, ConversationInfo ci) {
 			this.ci = ci;
 			this.id = id;
 		}
@@ -172,6 +185,19 @@ public class FragmentConversation extends ListFragment implements
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		add_sms = (ImageButton) getActivity().findViewById(R.id.add_sms);
+		add_sms.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(getActivity(), SmsAddActivity.class);
+				// 通过Intent对象启动另外一个Activity
+				startActivity(intent);
+			}
+			
+		});
 		getListView().setOnItemLongClickListener(this);
 		mClearEditText = (ClearEditText) getActivity().findViewById(
 				R.id.message_filter); // 自定义ClearEditText
