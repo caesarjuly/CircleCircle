@@ -109,15 +109,10 @@ public class ContactListAdapter extends BaseAdapter  implements SectionIndexer{
 		holder.getName().setText(contactinfos.get(position).getName());
 		
 		String a=Integer.toString(contactinfos.get(position).getId());
-
 		
 		holder.getImg().setText(null);
 		
 		holder.getImg().setBackgroundResource(R.drawable.ic_contact_picture);
-		
-		
-		
-
 		holder.setPosition(position);
 		
 		//“Ï≤Ωº”‘ÿÕ∑œÒ

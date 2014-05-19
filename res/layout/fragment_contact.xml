@@ -16,17 +16,30 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_marginLeft="5dp"
-            android:layout_weight="7"
+            android:layout_weight="2"
+
             android:gravity="center_vertical|left"
             android:text="@string/contatc_title"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
+        
+        <TextView
+        	android:id="@+id/tvtitle"
+        	android:layout_width="wrap_content"
+        	android:layout_height="fill_parent"  
+        	android:gravity="center"
+        	android:text="分组"
+        	android:layout_weight="4"
+        	android:textColor="#FFFFFF"
+        	android:textSize="18sp" />
+        
 
         <ImageButton
             android:id="@+id/conadd_imgbut"
             android:layout_width="10dp"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_weight="3"
+            android:layout_gravity="right"
             android:background="@drawable/maintab_toolbar_bg"
             android:src="@drawable/sym_action_add" />
     </LinearLayout>

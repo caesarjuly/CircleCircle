@@ -192,7 +192,30 @@
 	        android:layout_marginRight="10dp"
 	        android:background="@drawable/search_bar_edit_normal" 
 	        />
-        
+	    
+	    <TextView 
+	        android:id="@+id/textview_group"
+	        android:layout_width="60dp"
+	        android:layout_height="40dp"
+	        android:layout_below="@id/textview_address"
+	        android:layout_alignLeft="@id/textview_address"
+	        android:layout_marginTop="10dp"
+	        android:text="@string/contact_editgroup"
+	        android:background="@drawable/search_bar_edit_normal"
+	        />
+	    
+	    <TextView 
+	        android:id="@+id/textview_editgroup"
+	        android:layout_width="fill_parent"
+	        android:layout_height="40dp"
+	        android:layout_below="@id/edittext_address"
+	        android:layout_alignLeft="@id/edittext_address"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginRight="10dp"
+	        android:textSize="16sp"
+	        android:background="@drawable/search_bar_edit_normal"
+	        />
+   
 
 </RelativeLayout>
 

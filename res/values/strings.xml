@@ -8,6 +8,11 @@
     <string name="contactadd_title">添加联系人</string>
     <string name="contactedit_title">编辑联系人</string>
     <string name="contactinfo_title">联系人详情</string>
+    <string name="groups_title">分组管理</string>
+    
+    <string name="save">保存</string>
+    <string name="canel">取消</string>
+    
     <string name="basicinfos">基本信息</string>
     <string name="contact_phone">电话</string>
     <string name="contatc_title">联系人</string>
@@ -15,6 +20,11 @@
     <string name="otherinfos">其他信息</string>
     <string name="contact_im">QQ</string>
     <string name="contact_address">地址</string>
+    <string name="contact_editgroup">分组</string>
+    
+    
+    <string name="menuitem_addGroup">添加分组</string>
+    <string name="menuitem_deleteGroup">删除分组</string>
  
     
     <string name="contact_edit">编辑</string>

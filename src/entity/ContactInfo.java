@@ -23,6 +23,11 @@ public class ContactInfo implements Serializable {
 	 */
 	private int id;
 	
+	/**
+	 * ·Ö×éid
+	 */
+	private String groupid;
+	
 	
 	private ContactInfo cti;
 	
@@ -50,6 +55,14 @@ public class ContactInfo implements Serializable {
 
 	public void setSortKey(String sortKey) {
 		this.sortKey = sortKey;
+	}
+	
+	public String getGroupid() {
+		return groupid;
+	}
+
+	public void setGroupid(String groupid) {
+		this.groupid = groupid;
 	}
 	
 	public String getName() {

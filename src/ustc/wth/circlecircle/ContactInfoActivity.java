@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.util.Log;
@@ -46,10 +47,11 @@ public class ContactInfoActivity extends Activity{
         ContactInfo ct=new ContactInfo();
         ct=cts.getContactById(Integer.parseInt(str), name);
         phone=ct.getPhone();
+
         
      // 获取该联系人邮箱  
         Cursor emails = getContentResolver().query(  ContactsContract.CommonDataKinds.Email.CONTENT_URI,  null, 
-               ContactsContract.CommonDataKinds.Phone.CONTACT_ID  + " = " + str, null, null);  
+               ContactsContract.CommonDataKinds.Email.RAW_CONTACT_ID  + " = " + str, null, null);  
         if (emails!=null)
         {
         	if (emails.moveToFirst()) {  
@@ -70,11 +72,12 @@ public class ContactInfoActivity extends Activity{
         
         emails.close();
         
+
      // 获取该联系人IM  
         Cursor IMs = getContentResolver().query(  
                 Data.CONTENT_URI,  
                 new String[] { Data._ID, Im.PROTOCOL, Im.DATA },  
-                Data.CONTACT_ID + "=?" + " AND " + Data.MIMETYPE + "='"  
+                Data.RAW_CONTACT_ID + "=?" + " AND " + Data.MIMETYPE + "='"  
                         + Im.CONTENT_ITEM_TYPE + "'",  
                 new String[] { str }, null);  
         if(IMs!=null)
@@ -106,7 +109,7 @@ public class ContactInfoActivity extends Activity{
                 .query(  
                         ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,  
                         null,  
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID  
+                        ContactsContract.CommonDataKinds.StructuredPostal.RAW_CONTACT_ID  
                                 + " = " + str, null, null);  
         
         if(address!=null)
@@ -137,7 +140,23 @@ public class ContactInfoActivity extends Activity{
         	
         }
         address.close();      
+        Log.d("id", Integer.toString(contactinfo.getId()));
+
+        Cursor groupcursor=null;
+        String groupid="";
+        String[] groups= new String[]{GroupMembership.GROUP_ROW_ID};
+        //int value=171;
+        String where=GroupMembership.RAW_CONTACT_ID+" = ?"+" AND " +Data.MIMETYPE + "='" + GroupMembership.CONTENT_ITEM_TYPE+"'";
+        groupcursor=getContentResolver().query(Data.CONTENT_URI, groups, where, new String[]{str}, null);
+        if(groupcursor!=null&&groupcursor.getCount()!=0)
+        {
+        	//Log.i("123", "groupcursor："+groupcursor.getCount());
+        	groupcursor.moveToNext();
+          	  String id=groupcursor.getString(groupcursor.getColumnIndex(GroupMembership.GROUP_ROW_ID));
+          	  Log.i("123", "查询分组结果："+id);
+        }
         
+
        textview_name.setText(name);
        textview_phone.setText(phone);
        textview_email.setText(selfemail);

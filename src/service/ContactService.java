@@ -14,10 +14,15 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
+import android.provider.ContactsContract.CommonDataKinds.Im;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.RawContacts;
 import android.util.Log;
 import entity.ContactInfo;
 
@@ -25,12 +30,14 @@ import entity.ContactInfo;
 public class ContactService{
 	private Activity activity;
 	private Uri uri;
-	private List<ContactInfo> contactinfos;
+	public static List<ContactInfo> contactinfos;
+	private List<ContactInfo> contactinfos2;
 	private HashMap<String, String> contactBuffer;
 	private CharacterParser characterParser;
 	
 	public ContactService(Activity activity) {
 		contactinfos = new ArrayList<ContactInfo>();
+		contactinfos2 = new ArrayList<ContactInfo>();
 		this.activity = activity;
 		this.uri = Uri.parse(Uris.Contacts_URI_RAW);
 		ContactBuffer cb = new ContactBuffer(activity);
@@ -41,13 +48,34 @@ public class ContactService{
 		ContentResolver resolver = activity.getContentResolver();
 		characterParser = CharacterParser.getInstance();
 		Cursor cursor = resolver.query(Uri.parse(Uris.Contacts_URI_RAW),
-				null, null, null, null);
-		int id = cursor.getColumnIndex("contact_id");
+				null, RawContacts.DELETED+"=0", null, null);
+		int id = cursor.getColumnIndex("_id");//获取id
 		int name = cursor.getColumnIndex("display_name"); //获取姓名
 		
 		if (cursor != null) {
 			while (cursor.moveToNext()) {
 				ContactInfo contactinfo = new ContactInfo();
+				Cursor groupcursor=null;
+		        String groupid="";
+		        String[] groups= new String[]{GroupMembership.GROUP_ROW_ID};
+		        //int value=171;
+		        String where=GroupMembership.RAW_CONTACT_ID+" = ?"+" AND " +Data.MIMETYPE + "='" + GroupMembership.CONTENT_ITEM_TYPE+"'";
+		        groupcursor=resolver.query(Data.CONTENT_URI, groups, where, new String[]{Integer.toString(cursor.getInt(id))}, null);
+		        //设置groupid
+		        if(groupcursor!=null&&groupcursor.getCount()!=0)
+		        {
+		        	//Log.i("123", "groupcursor："+groupcursor.getCount());
+		        	groupcursor.moveToNext();
+		        	groupid=groupcursor.getString(groupcursor.getColumnIndex(GroupMembership.GROUP_ROW_ID));
+		          	//  Log.i(Integer.toString(cursor.getInt(id)), "查询分组结果："+groupid);
+		          	contactinfo.setGroupid(groupid);
+		        }
+		        else
+		        {
+		        	contactinfo.setGroupid("999");
+		        	//Log.i(Integer.toString(cursor.getInt(id)), "查询分组结果："+groupid);
+		        }
+		        groupcursor.close();
 				contactinfo.setId(cursor.getInt(id));
 				contactinfo.setName(cursor.getString(name));
 				String named=cursor.getString(name);
@@ -72,6 +100,24 @@ public class ContactService{
 		return contactinfos;
 	}
 	
+	
+	
+	private void getGroup(ContentResolver resolver,String contactId){
+		 Cursor cursor=null;
+		   
+		 String[] groups= new String[]{GroupMembership.GROUP_ROW_ID};
+		 String where=GroupMembership.CONTACT_ID+"="+contactId+" AND" +Data.MIMETYPE + "=" + " ' " + GroupMembership.CONTENT_ITEM_TYPE+" ' ";
+		 cursor=resolver.query(Data.CONTENT_URI, groups, where, null, null);
+		   
+		 while(cursor.moveToNext()){
+		  String id=cursor.getString(cursor.getColumnIndex(GroupMembership.GROUP_ROW_ID));
+		  Log.i("联系人分组", "查询分组结果："+id);
+		 }
+		 cursor.close();
+		}
+	
+	
+	
 	/**
 	 *通过Id获取联系人电话号码 
 	 *Date:2014-3-5
@@ -89,7 +135,7 @@ public class ContactService{
 
 		 Cursor phones = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
                  null, 
-                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + contact_id, 
+                 ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID + "=" + contact_id, 
                  null, null);
          int phoneIndex = 0;
          if(phones.getCount() > 0) {
