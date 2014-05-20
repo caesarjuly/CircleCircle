@@ -19,17 +19,12 @@ public class ContactInfo implements Parcelable {
 	 * id
 	 */
 	private int id;
-<<<<<<< HEAD
 	
 	/**
 	 * 分组id
 	 */
 	private String groupid;
 	
-	
-=======
-
->>>>>>> d84a381a12c0f7cae4154dd7867e0d10f760910d
 	private ContactInfo cti;
 
 	private String sortLetters; // 显示数据拼音的首字母
@@ -55,8 +50,6 @@ public class ContactInfo implements Parcelable {
 	public void setSortKey(String sortKey) {
 		this.sortKey = sortKey;
 	}
-<<<<<<< HEAD
-	
 	public String getGroupid() {
 		return groupid;
 	}
@@ -65,9 +58,6 @@ public class ContactInfo implements Parcelable {
 		this.groupid = groupid;
 	}
 	
-=======
-
->>>>>>> d84a381a12c0f7cae4154dd7867e0d10f760910d
 	public String getName() {
 		return name;
 	}

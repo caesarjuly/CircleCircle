@@ -32,7 +32,7 @@ public class ContactService{
 	private Uri uri;
 	public static List<ContactInfo> contactinfos;
 	private List<ContactInfo> contactinfos2;
-	private HashMap<String, String> contactBuffer;
+	static  HashMap<Integer, String> contactBuffer = new HashMap<Integer, String>();
 	private CharacterParser characterParser;
 	
 	public ContactService(Activity activity) {
@@ -40,8 +40,6 @@ public class ContactService{
 		contactinfos2 = new ArrayList<ContactInfo>();
 		this.activity = activity;
 		this.uri = Uri.parse(Uris.Contacts_URI_RAW);
-		ContactBuffer cb = new ContactBuffer(activity);
-		contactBuffer = cb.getcontactBuffer();   //获取联系人buffer
 	}	
 	
 	public List<ContactInfo> getContactInfo() {
@@ -59,23 +57,65 @@ public class ContactService{
 		        String groupid="";
 		        String[] groups= new String[]{GroupMembership.GROUP_ROW_ID};
 		        //int value=171;
-		        String where=GroupMembership.RAW_CONTACT_ID+" = ?"+" AND " +Data.MIMETYPE + "='" + GroupMembership.CONTENT_ITEM_TYPE+"'";
-		        groupcursor=resolver.query(Data.CONTENT_URI, groups, where, new String[]{Integer.toString(cursor.getInt(id))}, null);
-		        //设置groupid
-		        if(groupcursor!=null&&groupcursor.getCount()!=0)
-		        {
-		        	//Log.i("123", "groupcursor："+groupcursor.getCount());
-		        	groupcursor.moveToNext();
-		        	groupid=groupcursor.getString(groupcursor.getColumnIndex(GroupMembership.GROUP_ROW_ID));
-		          	//  Log.i(Integer.toString(cursor.getInt(id)), "查询分组结果："+groupid);
-		          	contactinfo.setGroupid(groupid);
+		        if(contactBuffer.containsKey(cursor.getInt(id))){
+		        	contactinfo.setGroupid(contactBuffer.get(cursor.getInt(id)));
+		        }else{
+		        	 String where=GroupMembership.RAW_CONTACT_ID+" = ?"+" AND " +Data.MIMETYPE + "='" + GroupMembership.CONTENT_ITEM_TYPE+"'";
+				        groupcursor=resolver.query(Data.CONTENT_URI, groups, where, new String[]{Integer.toString(cursor.getInt(id))}, null);
+				        //设置groupid
+				        if(groupcursor!=null&&groupcursor.getCount()!=0)
+				        {
+				        	//Log.i("123", "groupcursor："+groupcursor.getCount());
+				        	groupcursor.moveToNext();
+				        	groupid=groupcursor.getString(groupcursor.getColumnIndex(GroupMembership.GROUP_ROW_ID));
+				          	//  Log.i(Integer.toString(cursor.getInt(id)), "查询分组结果："+groupid);
+				          	contactinfo.setGroupid(groupid);
+				        }
+				        else
+				        {
+				        	contactinfo.setGroupid("999");
+				        	//Log.i(Integer.toString(cursor.getInt(id)), "查询分组结果："+groupid);
+				        }
+				        groupcursor.close();
+				        contactBuffer.put(cursor.getInt(id), contactinfo.getGroupid());
 		        }
-		        else
-		        {
-		        	contactinfo.setGroupid("999");
-		        	//Log.i(Integer.toString(cursor.getInt(id)), "查询分组结果："+groupid);
-		        }
-		        groupcursor.close();
+		       
+				contactinfo.setId(cursor.getInt(id));
+				contactinfo.setName(cursor.getString(name));
+				String named=cursor.getString(name);
+				//if(Integer.parseInt(named)==1);
+				if(named!=null)
+				
+				{String pinyin = characterParser.getSelling(named);
+					String sortString = pinyin.substring(0, 1).toUpperCase();
+					
+					// 正则表达式，判断首字母是否是英文字母
+					if(sortString.matches("[A-Z]")){
+						contactinfo.setSortLetters(sortString.toUpperCase());
+					}else{
+						contactinfo.setSortLetters("#");
+					}
+					
+					contactinfos.add(contactinfo);
+				}
+			}
+			cursor.close();
+		}
+		return contactinfos;
+	}
+	
+	public List<ContactInfo> getContactInfoWithoutGroup() {
+		ContentResolver resolver = activity.getContentResolver();
+		characterParser = CharacterParser.getInstance();
+		Cursor cursor = resolver.query(Uri.parse(Uris.Contacts_URI_RAW),
+				null, RawContacts.DELETED+"=0", null, null);
+		int id = cursor.getColumnIndex("_id");//获取id
+		int name = cursor.getColumnIndex("display_name"); //获取姓名
+		
+		if (cursor != null) {
+			while (cursor.moveToNext()) {
+				ContactInfo contactinfo = new ContactInfo();
+		        //int value=171;
 				contactinfo.setId(cursor.getInt(id));
 				contactinfo.setName(cursor.getString(name));
 				String named=cursor.getString(name);

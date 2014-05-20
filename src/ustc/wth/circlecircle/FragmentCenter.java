@@ -1,6 +1,5 @@
 package ustc.wth.circlecircle;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 import service.ContactService;
 import entity.ContactInfo;
 import entity.GroupInfo;
-=======
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,7 +41,6 @@ import utils.Uris;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
->>>>>>> d84a381a12c0f7cae4154dd7867e0d10f760910d
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -51,14 +48,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-<<<<<<< HEAD
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-=======
 import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,60 +63,13 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 public class FragmentCenter extends Fragment {
->>>>>>> d84a381a12c0f7cae4154dd7867e0d10f760910d
-
 	private LayoutInflater layoutinflater;
 	private View myview;
 	private Context context;
-<<<<<<< HEAD
 	private List<ContactInfo> contact_infos;
 	private ContactService contact;
 
 	private  ImageButton imagebutton;
- 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {	
-
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
- 		return inflater.inflate(R.layout.fragment_center, null);		
- 	}	
- 	
- 	
-	 public void onResume()   
-	    {  
-	        super.onResume();  
- 	
-	       
-	        
-	        contact = new ContactService(this.getActivity());
-	        contact_infos = contact.getContactInfo();              //调用contactservice初始化数据
-	        imagebutton = (ImageButton) getActivity().findViewById(R.id.imgbut1); 
-	        Log.d("sssb","ssssb");
-	        imagebutton.setOnClickListener(new View.OnClickListener() {  
-	        	  
-	            @Override  
-	            public void onClick(View v) {  
-	            	Log.d("sssb","ssssb");
-	            	 GroupInfo groupinfo=new GroupInfo();
-	     	        groupinfo.setName("groupname");
-	     	        List list=new ArrayList<GroupInfo>();
-	     	        list.add(groupinfo);
-	            	ResponseJson json=new ResponseJson();
-	    	        json.setDataEx(list);
-	    	        String par="responseJson.dataEx="+list;
-	    	        HttpUtil.queryStringForPost("android/android_synchronousContactor?"+par); 
-	            }  
-	        });  
-
-	        
-	        
-	    }
- 	
- 	
-  }
-	
-=======
 	private BroadcastReceiver mSender;
 	private BroadcastReceiver mReceiver;
 	ServerThread st;
@@ -138,7 +86,6 @@ public class FragmentCenter extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
->>>>>>> d84a381a12c0f7cae4154dd7867e0d10f760910d
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

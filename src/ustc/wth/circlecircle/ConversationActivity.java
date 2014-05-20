@@ -128,6 +128,7 @@ public class ConversationActivity extends ListActivity {
 			}
 		}
 		
+		sms.markUnread(convId);
 		smsList = sms.getSmsByConvId(convId);
 		smsListAdapter = new SmsListAdapter(this.getApplicationContext(),
 				smsList, isMass, phoneToName);

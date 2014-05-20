@@ -1,6 +1,8 @@
 package async;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import service.ContactService;
 import adapter.ConversationListAdapter;
@@ -15,6 +17,7 @@ public class ConvNameAsyncLoader extends AsyncTask<Void, Void, Void> {
 	private List<ConversationInfo> conversations;
 	private ConversationListAdapter smsListAdapter;
 	Context ctx;
+	static Map<String, String> phoneToName  = new HashMap<String, String>();
 
 	public ConvNameAsyncLoader(Context context, ConversationListAdapter smsListAdapter,
 			List<ConversationInfo> conversations) {
@@ -26,14 +29,27 @@ public class ConvNameAsyncLoader extends AsyncTask<Void, Void, Void> {
 
 	@Override
 	protected Void doInBackground(Void... params) {
+		String name;
 		for (ConversationInfo conversation : conversations) {
 			if (!conversation.getIsMass()) {
 				ContactInfo ci = conversation.getCti();
-				ci.setName(cts.getContactNameByPhone(ci.getPhone()));
+				if(phoneToName.containsKey(ci.getPhone())){
+					ci.setName(phoneToName.get(ci.getPhone()));
+				}else{
+					name = cts.getContactNameByPhone(ci.getPhone());
+					phoneToName.put(ci.getPhone(), name);
+					ci.setName(name);
+				}
 			} else {
 				ContactInfo[] cis = conversation.getCtis();
 				for (int i = 0; i < cis.length; i++) {
-					cis[i].setName(cts.getContactNameByPhone(cis[i].getPhone()));
+					if(phoneToName.containsKey(cis[i].getPhone())){
+						cis[i].setName(phoneToName.get(cis[i].getPhone()));
+					}else{
+						name = cts.getContactNameByPhone(cis[i].getPhone());
+						phoneToName.put(cis[i].getPhone(), name);
+						cis[i].setName(name);
+					}
 				}
 			}
 		}
