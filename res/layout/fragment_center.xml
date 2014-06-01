@@ -9,6 +9,8 @@
         android:layout_height="50dp"
         android:background="@drawable/maintab_toolbar_bg"
         android:paddingLeft="10dp" >
+        
+
 
         <TextView
             android:id="@+id/message_title"
@@ -22,10 +24,32 @@
             android:textSize="18sp" />
 
     </LinearLayout>
+    
+     <EditText
+           android:id="@+id/userlogin"
+		   android:layout_gravity="center"
+           android:layout_width="200dp"
+           android:layout_height="80dp"
+           android:hint="请输入用户名"
+            
+           />
+      <EditText
+           android:id="@+id/passlogin"
+		   android:layout_gravity="center"
+           android:layout_width="200dp"
+           android:layout_height="80dp"
+           android:hint="请输入密码"
+           />
+      <Button
+          android:id="@+id/loginbutton"
+          android:layout_gravity="center"
+          android:layout_width="200dp"
+          android:layout_height="80dp" 
+          />
 
     <ImageButton 
         android:id="@+id/imgbut1"
-         android:orientation="horizontal"
+        android:orientation="horizontal"
         android:layout_width="260dp"
         android:layout_height="70dp"
         android:layout_marginTop="60dp"
@@ -34,7 +58,7 @@
         />
     <ImageButton 
         android:id="@+id/imgbut2"
-         android:orientation="horizontal"
+        android:orientation="horizontal"
         android:layout_width="260dp"
         android:layout_height="70dp"
         android:layout_marginLeft="60dp"

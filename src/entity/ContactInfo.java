@@ -19,12 +19,11 @@ public class ContactInfo implements Parcelable {
 	 * id
 	 */
 	private int id;
-	
 	/**
 	 * 分组id
 	 */
 	private String groupid;
-	
+
 	private ContactInfo cti;
 
 	private String sortLetters; // 显示数据拼音的首字母
@@ -57,7 +56,7 @@ public class ContactInfo implements Parcelable {
 	public void setGroupid(String groupid) {
 		this.groupid = groupid;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
