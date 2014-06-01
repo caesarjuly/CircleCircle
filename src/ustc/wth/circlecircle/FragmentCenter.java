@@ -6,6 +6,7 @@ import java.util.List;
 
 import service.ContactService;
 import entity.ContactInfo;
+import entity.GroupInfo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,6 +53,7 @@ public class FragmentCenter extends Fragment {
 	private Context context;
 	private List<ContactInfo> contact_infos;
 	private ContactService contact;
+
 	private EditText username;
 	private EditText password;
 	private TextView send_sms_web;
@@ -61,7 +63,9 @@ public class FragmentCenter extends Fragment {
 	private Button loginbutton;
 	private Switch switchTest;
  	
- 	
+
+	private  ImageButton imagebutton;
+
 	private BroadcastReceiver mSender;
 	private BroadcastReceiver mReceiver;
 	ServerThread st;

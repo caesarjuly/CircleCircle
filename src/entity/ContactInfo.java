@@ -56,6 +56,7 @@ public class ContactInfo implements Parcelable {
 	public void setGroupid(String groupid) {
 		this.groupid = groupid;
 	}
+
 	public String getName() {
 		return name;
 	}

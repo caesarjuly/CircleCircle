@@ -7,13 +7,16 @@ import service.SmsService;
 import utils.CharacterParser;
 import utils.ClearEditText;
 import utils.ConvNameFormat;
+import utils.Uris;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
@@ -65,6 +68,8 @@ public class FragmentConversation extends ListFragment implements
 		String unReadNum = sms.getUnreadNum(); // 获取新信息数目
 		Toast.makeText(getActivity(), "您有" + unReadNum + "条新消息！",
 				Toast.LENGTH_LONG).show();
+		getActivity().getContentResolver().registerContentObserver(Uri.parse(Uris.CONVERSATION_URI), true, new ConversationObserver(new Handler()));
+		
 		
 	}
 
@@ -272,5 +277,18 @@ public class FragmentConversation extends ListFragment implements
 
 		convListAdapter.updateListView(filterDateList);
 	}
+	
+	private final class ConversationObserver extends ContentObserver{  
+        public ConversationObserver(Handler handler) {  
+            super(handler);  
+        }  
+        @Override  
+        public void onChange(boolean selfChange) {  
+        	conversations = sms.getSmsInfo();
+        	new ConvNameAsyncLoader(getActivity(), convListAdapter, conversations)
+			.execute();
+        	convListAdapter.updateListView(conversations);
+            }  
+        } 
 
 }

@@ -64,7 +64,7 @@ public class SmsAddActivity extends Activity{
 		nameToId = new HashMap<String, Integer>();
 		sms = new SmsService(this);
 		contact = new ContactService(this);
-		contact_infos = contact.getContactInfo();
+		contact_infos = contact.getContactInfoWithoutGroup();
 		mu = (ChipsMultiAutoCompleteTextview) findViewById(R.id.multiAutoCompleteTextView1);
 
 		String[] item = new String[contact_infos.size()]; 
