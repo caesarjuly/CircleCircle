@@ -2,12 +2,16 @@ package async;
 
 import java.util.HashMap;
 
+import buffer.Hash;
+import buffer.PhotoBuffer;
+
 import holder.ConversationHolder;
 import service.ContactService;
 import ustc.wth.circlecircle.R;
 import utils.ConvNameFormat;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -19,6 +23,7 @@ public class ConvPhotoAsyncLoader extends AsyncTask<Void, Void, ContactInfo> {
 	private ConversationHolder holder;
 	private int position;
 	private ConversationInfo conversation;
+	private Hash<Bitmap> pb;
 	Context ctx;
 
 	public ConvPhotoAsyncLoader(Context context, ConversationHolder holder,
@@ -27,21 +32,22 @@ public class ConvPhotoAsyncLoader extends AsyncTask<Void, Void, ContactInfo> {
 		this.position = position;
 		this.ctx = context;
 		this.conversation = conversation;
-		cts = new ContactService((Activity) ctx);
+		pb = PhotoBuffer.getInstance();
+		cts = new ContactService();
 	}
 
 	@Override
 	protected ContactInfo doInBackground(Void...params) {
-		ContactInfo ctis = null;
+		ContactInfo cti = null;
 		String phone;
 		if (!conversation.getIsMass()) {
-			ctis = conversation.getCti();
-			phone = conversation.getCti().getPhone();
-			ctis.setPhoto(cts.getConvPhotoByPhone(phone));
+			cti = conversation.getCti();
+			phone = cti.getPhone();
+			Bitmap photo = cts.getConvPhotoByPhone(phone);
+			pb.put(cti.getPhone(), photo);
 		}
-		conversation.setIsLoaded(true);
 
-		return ctis;
+		return cti;
 	}
 
 	@Override
@@ -50,9 +56,9 @@ public class ConvPhotoAsyncLoader extends AsyncTask<Void, Void, ContactInfo> {
 		super.onPostExecute(result);
 		if (position == holder.getPosition()) {
 			if (!conversation.getIsMass()) {
-				if (result.getPhoto() != null) {
+				if (pb.get(result.getPhone()) != null) {
 					Drawable bd = new BitmapDrawable(ctx.getResources(),
-							result.getPhoto());
+							pb.get(result.getPhone()));
 					holder.getImg().setText(null);
 					holder.getImg().setBackgroundDrawable(bd);
 				}

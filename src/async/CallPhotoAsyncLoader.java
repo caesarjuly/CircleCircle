@@ -2,6 +2,9 @@ package async;
 
 import java.util.HashMap;
 
+import buffer.Hash;
+import buffer.PhotoBuffer;
+
 import holder.CallHolder;
 import holder.ConversationHolder;
 import service.ContactService;
@@ -10,6 +13,7 @@ import utils.ConvNameFormat;
 import adapter.CallListAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -22,6 +26,7 @@ public class CallPhotoAsyncLoader extends AsyncTask<Void, Void, CallInfo> {
 	private CallHolder holder;
 	private int position;
 	private CallInfo callInfo;
+	private Hash<Bitmap> pb;
 	Context ctx;
 
 	public CallPhotoAsyncLoader(Context context,
@@ -30,14 +35,14 @@ public class CallPhotoAsyncLoader extends AsyncTask<Void, Void, CallInfo> {
 		this.position = position;
 		this.ctx = context;
 		this.callInfo = callInfo;
-		cts = new ContactService((Activity) ctx);
+		pb = PhotoBuffer.getInstance();
+		cts = new ContactService();
 	}
 
 	@Override
 	protected CallInfo doInBackground(Void...params) {
-		callInfo.setName(cts.getContactNameByPhone(callInfo.getPhone()));
-		callInfo.setPhoto(cts.getConvPhotoByPhone(callInfo.getPhone()));
-		callInfo.setLoaded(true);
+		Bitmap photo = cts.getConvPhotoByPhone(callInfo.getPhone());
+		pb.put(callInfo.getPhone(), photo);
 		return callInfo;
 
 	}
@@ -45,17 +50,12 @@ public class CallPhotoAsyncLoader extends AsyncTask<Void, Void, CallInfo> {
 	@Override
 	protected void onPostExecute(CallInfo result) {
 		if (position == holder.getPosition()) {
-				if (result.getPhoto() != null) {
+				if (pb.get(result.getPhone()) != null) {
 					Drawable bd = new BitmapDrawable(ctx.getResources(),
-							result.getPhoto());
+							pb.get(result.getPhone()));
 					holder.getImg().setText(null);
 					holder.getImg().setBackgroundDrawable(bd);
-				}
-				if(result.getName()!=null){
-					holder.getName().setText(result.getName());
-					holder.getBody().setText(result.getPhone());
-				}
-				
+				}			
 
 			}
 	}

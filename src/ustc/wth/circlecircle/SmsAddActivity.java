@@ -11,10 +11,10 @@ import java.util.Set;
 import entity.ContactInfo;
 import entity.ConversationInfo;
 import entity.SmsInfo;
+import service.CircleCircleFacade;
+import service.CircleCircleImp;
 import service.ContactService;
 import service.SmsService;
-import ustc.wth.circlecircle.ConversationActivity.mReceiver;
-import ustc.wth.circlecircle.ConversationActivity.mSender;
 import utils.ChipsMultiAutoCompleteTextview;
 import utils.Threads;
 import utils.Uris;
@@ -46,11 +46,9 @@ public class SmsAddActivity extends Activity{
 	private ContactService ct;
 	private List<ContactInfo> contact_infos;
 	private HashMap<String, Integer> nameToId;
-	private ContactService contact;
 	private EditText sms_input;
 	private Button sms_send;
-	private SmsService sms;
-	private BroadcastReceiver mSender;
+	private CircleCircleFacade circlecircle;
 	static int distinction = 0;
 
 	@Override
@@ -60,11 +58,9 @@ public class SmsAddActivity extends Activity{
 		sms_input = (EditText) findViewById(R.id.sms_input);
 		sms_send = (Button) findViewById(R.id.sms_send);
 		
-		ct = new ContactService(this);
 		nameToId = new HashMap<String, Integer>();
-		sms = new SmsService(this);
-		contact = new ContactService(this);
-		contact_infos = contact.getContactInfoWithoutGroup();
+		circlecircle = new CircleCircleImp();
+		contact_infos = circlecircle.getContactInfoWithoutGroup();
 		mu = (ChipsMultiAutoCompleteTextview) findViewById(R.id.multiAutoCompleteTextView1);
 
 		String[] item = new String[contact_infos.size()]; 

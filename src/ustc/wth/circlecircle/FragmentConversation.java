@@ -3,6 +3,11 @@ package ustc.wth.circlecircle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import buffer.Hash;
+import buffer.PhotoBuffer;
+import service.CircleCircleFacade;
+import service.CircleCircleImp;
 import service.SmsService;
 import utils.CharacterParser;
 import utils.ClearEditText;
@@ -17,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.content.Intent;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
@@ -34,7 +40,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import async.ConvNameAsyncLoader;
 import entity.ContactInfo;
 import entity.ConversationInfo;
 import adapter.*;
@@ -42,7 +47,7 @@ import adapter.*;
 public class FragmentConversation extends ListFragment implements
 		OnItemLongClickListener {
 	private List<ConversationInfo> conversations;
-	private SmsService sms;
+	private CircleCircleFacade circlecircle;
 	private PopupWindow pw;
 	private ClearEditText mClearEditText;
 	private ConversationListAdapter convListAdapter;
@@ -58,14 +63,14 @@ public class FragmentConversation extends ListFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		sms = new SmsService(this.getActivity());
-		conversations = sms.getSmsInfo();
+		circlecircle = new CircleCircleImp();
+		conversations = circlecircle.getConvInfo();
 		convListAdapter = new ConversationListAdapter(this.getActivity(),
 				conversations);
-		new ConvNameAsyncLoader(getActivity(), convListAdapter, conversations)
-				.execute();
+//		new ConvNameAsyncLoader(getActivity(), convListAdapter, conversations)
+//				.execute();
 		setListAdapter(convListAdapter);
-		String unReadNum = sms.getUnreadNum(); // 获取新信息数目
+		String unReadNum = circlecircle.getUnreadNum(); // 获取新信息数目
 		Toast.makeText(getActivity(), "您有" + unReadNum + "条新消息！",
 				Toast.LENGTH_LONG).show();
 		getActivity().getContentResolver().registerContentObserver(Uri.parse(Uris.CONVERSATION_URI), true, new ConversationObserver(new Handler()));
@@ -75,6 +80,7 @@ public class FragmentConversation extends ListFragment implements
 
 	public void onListItemClick(ListView parent, View v, int position, long id) {
 		ConversationInfo conv = conversations.get(position);
+		Hash<Bitmap> pb = PhotoBuffer.getInstance();
 		TextView tv = (TextView) v.findViewById(R.id.name);
 		Bundle b = new Bundle();
 		// 生成一个Intent对象
@@ -82,8 +88,7 @@ public class FragmentConversation extends ListFragment implements
 		if(!conv.getIsMass()){
 			intent.putExtra("contactName", conv.getCti().getName());
 			intent.putExtra("phone", conv.getCti().getPhone());
-			b.putParcelable("photo", conv.getCti()
-					.getPhoto());
+			b.putParcelable("photo", pb.get(conv.getCti().getPhone()));
 		}else{
 			b.putParcelableArray("contactInfos", conv.getCtis());
 		}
@@ -95,7 +100,7 @@ public class FragmentConversation extends ListFragment implements
 		intent.setClass(getActivity(), ConversationActivity.class);
 		// 通过Intent对象启动另外一个Activity
 		startActivity(intent);
-		sms.markUnread(conv.getId());
+		circlecircle.markUnread(conv.getId());
 		for(int i=0;i<conversations.size();i++){
 			if(conversations.get(i).getId() == conv.getId()){
 				conversations.get(i).setRead(1);
@@ -178,7 +183,7 @@ public class FragmentConversation extends ListFragment implements
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			pw.dismiss();
-			sms.deleteConversation(id);
+			circlecircle.deleteConversation(id);
 			convListAdapter.removeConversation(ci);
 			convListAdapter.notifyDataSetChanged();
 			pw = null;
@@ -284,9 +289,7 @@ public class FragmentConversation extends ListFragment implements
         }  
         @Override  
         public void onChange(boolean selfChange) {  
-        	conversations = sms.getSmsInfo();
-        	new ConvNameAsyncLoader(getActivity(), convListAdapter, conversations)
-			.execute();
+        	conversations = circlecircle.getConvInfo();
         	convListAdapter.updateListView(conversations);
             }  
         } 

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import service.CircleCircleFacade;
+import service.CircleCircleImp;
 import service.SmsService;
 import ustc.wth.circlecircle.FragmentConversation.ConDelListener;
 import ustc.wth.circlecircle.FragmentConversation.TelCallListener;
@@ -56,7 +58,7 @@ public class ConversationActivity extends ListActivity {
 	private boolean isMass;
 	private String name;
 	private SmsListAdapter smsListAdapter;
-	private SmsService sms;
+	private CircleCircleFacade circlecircle;
 	private TextView sms_title;
 	private TextView sms_photo;
 	private TextView sms_phone;
@@ -68,9 +70,6 @@ public class ConversationActivity extends ListActivity {
 	private SmsInfo smsInfo;
 	private PopupWindow pw;
 	private String copy;
-	private BroadcastReceiver mSender;
-	private BroadcastReceiver mReceiver;
-	private HashMap<String, String> phoneToName = new HashMap<String, String>();
 	static int distinction = 0;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +82,7 @@ public class ConversationActivity extends ListActivity {
 		sms_input = (EditText) findViewById(R.id.sms_input);
 		sms_send = (Button) findViewById(R.id.sms_send);
 		
-		sms = new SmsService(this);
+		circlecircle = new CircleCircleImp();
 		
 
 		Intent intent = this.getIntent();
@@ -97,7 +96,6 @@ public class ConversationActivity extends ListActivity {
 			 cis = new ContactInfo[parcels.length];
 			 for (int i = 0; i < parcels.length; i++) {
 				 cis[i] = (ContactInfo) parcels[i];
-				 phoneToName.put(cis[i].getPhone(), cis[i].getName());
 			 } 
 		}
 		String contactName = (String) intent
@@ -128,10 +126,10 @@ public class ConversationActivity extends ListActivity {
 			}
 		}
 		
-		sms.markUnread(convId);
-		smsList = sms.getSmsByConvId(convId);
+		circlecircle.markUnread(convId);
+		smsList = circlecircle.getSmsByConvId(convId);
 		smsListAdapter = new SmsListAdapter(this.getApplicationContext(),
-				smsList, isMass, phoneToName);
+				smsList, isMass);
 		setListAdapter(smsListAdapter); 
 		getContentResolver().registerContentObserver(Uri.parse(Uris.SMS_URI_ALL), true, new SmsObserver(new Handler()));
 		
@@ -147,7 +145,7 @@ public class ConversationActivity extends ListActivity {
 					newSms.setStatus(64);
 					newSms.setAddress(phone);
 					newSms.setThread_id(convId);
-					Uri result = sms.addSms(newSms);
+					Uri result = circlecircle.addSms(newSms);
 					phones.add(phone);
 					sendSMS(phone, content, result);
 				}else{
@@ -160,7 +158,7 @@ public class ConversationActivity extends ListActivity {
 						newSms.setStatus(64);
 						newSms.setAddress(cis[i].getPhone());
 						newSms.setThread_id(convId);
-						Uri result = sms.addSms(newSms);
+						Uri result = circlecircle.addSms(newSms);
 						sendSMS(cis[i].getPhone(), content, result);
 					}
 				}
@@ -224,7 +222,7 @@ public class ConversationActivity extends ListActivity {
 						newSms.setStatus(64);
 						newSms.setAddress(phone);
 						newSms.setThread_id(convId);
-						Uri result = sms.addSms(newSms);
+						Uri result = circlecircle.addSms(newSms);
 						phones.add(phone);
 						sendSMS(phone, sms_input.getText().toString(), result);
 					}else{
@@ -237,7 +235,7 @@ public class ConversationActivity extends ListActivity {
 							newSms.setStatus(64);
 							newSms.setAddress(cis[i].getPhone());
 							newSms.setThread_id(convId);
-							Uri result = sms.addSms(newSms);
+							Uri result = circlecircle.addSms(newSms);
 							sendSMS(cis[i].getPhone(), sms_input.getText().toString(), result);
 						}
 					}
@@ -298,7 +296,7 @@ public class ConversationActivity extends ListActivity {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						pw.dismiss();
-						sms.deleteSms(smsInfo.getId());
+						circlecircle.deleteSms(smsInfo.getId());
 						smsListAdapter.removeSms(smsInfo);
 						smsListAdapter.notifyDataSetChanged();
 						pw = null;
@@ -328,41 +326,11 @@ public class ConversationActivity extends ListActivity {
         }  
         @Override  
         public void onChange(boolean selfChange) {  
-            smsList = sms.getSmsByConvId(convId);
+            smsList = circlecircle.getSmsByConvId(convId);
             smsListAdapter.updateListView(smsList);
             }  
         } 
 
-	class mSender extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// 判断短信是否发送成功
-			switch (getResultCode()) {
-			case Activity.RESULT_OK:
-				if(!isMass){
-					Toast.makeText(context, "短信发送成功", Toast.LENGTH_SHORT).show();
-				}
-				String uri = intent.getStringExtra("result");
-				SmsService smsService = new SmsService((Activity) context);
-				smsService.update(uri);
-				break;
-			default:
-				Toast.makeText(context, "发送失败", Toast.LENGTH_LONG).show();
-				break;
-			}
-		}
-	};
-	class mReceiver extends BroadcastReceiver{
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// 表示对方成功收到短信
-			if(!isMass){
-				Toast.makeText(context, "对方接收成功", Toast.LENGTH_LONG).show();
-			}
-			}
-	};
 
 	private void sendSMS(String phoneNumber, String message, Uri result) {
 		// ---sends an SMS message to another device---
@@ -371,11 +339,13 @@ public class ConversationActivity extends ListActivity {
 		// create the sentIntent parameter
 		Intent sentIntent = new Intent(Uris.SENT_SMS_ACTION);
 		sentIntent.putExtra("result", result.toString());
+		sentIntent.putExtra("isMass", isMass);
 		PendingIntent sentPI = PendingIntent.getBroadcast(this, distinction++, sentIntent,
 				0);
 
 		// create the deilverIntent parameter
 		Intent deliverIntent = new Intent(Uris.DELIVERED_SMS_ACTION);
+		deliverIntent.putExtra("isMass", isMass);
 		PendingIntent deliverPI = PendingIntent.getBroadcast(this, distinction,
 				deliverIntent, 0);
 
@@ -399,23 +369,4 @@ public class ConversationActivity extends ListActivity {
             return super.onTouchEvent(event);
     }
 	
-	
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		mSender = new mSender();
-		mReceiver = new mReceiver();
-		registerReceiver(mSender, new IntentFilter(Uris.SENT_SMS_ACTION));
-		registerReceiver(mReceiver, new IntentFilter(Uris.DELIVERED_SMS_ACTION));
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		unregisterReceiver(mSender);  
-        unregisterReceiver(mReceiver); 
-		super.onPause();
-	}
 }

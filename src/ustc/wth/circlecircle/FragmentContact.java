@@ -7,6 +7,8 @@ import java.util.List;
 import android.util.Log;
 import android.view.Window; 
 import entity.ContactInfo;
+import service.CircleCircleFacade;
+import service.CircleCircleImp;
 import service.ContactService;
 import utils.CharacterParser;
 import utils.ClearEditText;
@@ -62,7 +64,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 	private static final int OPTIONS_MENU_ITEM_GROUPS = Menu.FIRST + 1;
 	private List<ContactInfo> contact_infos;
 	private HashMap<String, String> contactgroup;
-	private ContactService contact;
+	private CircleCircleFacade circlecirle;
 
 	private ClearEditText mClearEditText;
 	private ContactListAdapter adapter;
@@ -100,6 +102,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 		setHasOptionsMenu(true);
 		contactgroup=new HashMap<String,String>();
 		initViews();	
+		circlecirle = new CircleCircleImp();
 	}
 	
 	/**
@@ -149,8 +152,7 @@ public class FragmentContact extends ListFragment implements OnItemLongClickList
 			lv.setOnItemClickListener(this);
 			content =this.getActivity();
 			group_activity=this.getActivity();
-			contact = new ContactService(this.getActivity());
-			contact_infos = contact.getContactInfo();              //调用contactservice初始化数据
+			contact_infos = circlecirle.getContactInfo();              //调用contactservice初始化数据
 			Collections.sort(contact_infos, pinyinComparator);     //对数据源按照拼音进行排序
 			adapter=new ContactListAdapter(this.getActivity(), contact_infos);
 			setListAdapter(adapter);

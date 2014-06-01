@@ -4,24 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.CallInfo;
-import entity.ConversationInfo;
 import service.CallService;
-import ustc.wth.circlecircle.FragmentConversation.ConDelListener;
-import ustc.wth.circlecircle.FragmentConversation.TelCallListener;
+import service.CircleCircleFacade;
+import service.CircleCircleImp;
 import utils.CharacterParser;
 import utils.ClearEditText;
-import utils.ConvNameFormat;
-import utils.Uris;
 import adapter.CallListAdapter;
-import adapter.ConversationListAdapter;
-import android.content.Intent;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.CallLog;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -31,17 +24,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import async.ConvNameAsyncLoader;
 
 public class FragmentHome extends ListFragment implements
 OnItemLongClickListener {
-	private CallService cs;
+	private CircleCircleFacade circlecircle;
 	private List<CallInfo> callList;
 	private CallListAdapter callListAdapter;
 	PopupWindow pw;
@@ -57,8 +48,8 @@ OnItemLongClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		cs = new CallService(this.getActivity());
-		callList = cs.getCallLog();
+		circlecircle = new CircleCircleImp();
+		callList = circlecircle.getCallLog();
 		callListAdapter = new CallListAdapter(this.getActivity(),
 				callList);
 		setListAdapter(callListAdapter);
@@ -114,7 +105,7 @@ OnItemLongClickListener {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			pw.dismiss();
-			cs.deleteCall(ci.getPhone());
+			circlecircle.deleteCall(ci.getPhone());
 			//callListAdapter.removeCall(ci);
 		//	callListAdapter.notifyDataSetChanged();
 			pw = null;
@@ -128,7 +119,7 @@ OnItemLongClickListener {
         }  
         @Override  
         public void onChange(boolean selfChange) {  
-        	callList = cs.getCallLog();
+        	callList = circlecircle.getCallLog();
         	callListAdapter.updateListView(callList);
             }  
         } 

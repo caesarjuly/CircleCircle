@@ -70,7 +70,7 @@ public class GroupsListAdapter extends BaseAdapter {
         
         if(contactinfos==null)
         {
-        	contact = new ContactService(activity);
+        	contact = new ContactService();
             contactinfos=contact.getContactInfo();
         }
         

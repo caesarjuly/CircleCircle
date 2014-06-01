@@ -9,21 +9,7 @@ public class CallInfo {
 	private String name;
 	private int type;
 	private long date;
-	private boolean isLoaded;
-	private Bitmap photo;
 	
-	public Bitmap getPhoto() {
-		return photo;
-	}
-	public void setPhoto(Bitmap photo) {
-		this.photo = photo;
-	}
-	public boolean isLoaded() {
-		return isLoaded;
-	}
-	public void setLoaded(boolean isLoaded) {
-		this.isLoaded = isLoaded;
-	}
 	public int getId() {
 		return id;
 	}

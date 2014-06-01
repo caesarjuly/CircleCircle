@@ -40,7 +40,7 @@ public class ImageAsyncLoader extends AsyncTask<Integer, Void, ContactInfo[]>{
 			this.ctx = context;
 			this.contact_info = contactinfo;
 			this.cm = cb.getBuffer();
-			cts = new ContactService((Activity) ctx);
+			cts = new ContactService();
 		}
 
 		@Override

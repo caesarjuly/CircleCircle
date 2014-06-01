@@ -12,6 +12,7 @@ import ustc.wth.circlecircle.R;
 import utils.ConvNameFormat;
 import utils.TimeFormat;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
@@ -29,11 +30,13 @@ public class ConversationListAdapter extends BaseAdapter {
 	private List<ConversationInfo> conversations;
 	Context c;
 	private LayoutInflater layoutinflater;
+	private Hash<Bitmap> pb;
 	
 	public ConversationListAdapter(Context c, List<ConversationInfo> conversations) {
 		this.c = c;
 		this.conversations = conversations;
 		layoutinflater = LayoutInflater.from(c);
+		this.pb = PhotoBuffer.getInstance();
 	}
 	
 	public void removeConversation(ConversationInfo ci){
@@ -113,10 +116,10 @@ public class ConversationListAdapter extends BaseAdapter {
 						.getColor(R.color.lightgray));
 			}
 			
-			if(convInfo.getIsLoaded()){  //被异步加载过		
-				if(cti.getPhoto() != null){
+			if(pb.contains(phone)){  //被异步加载过		
+				if(pb.get(phone) != null){
 					Drawable bd = new BitmapDrawable(c.getResources(),
-							cti.getPhoto());
+							pb.get(phone));
 					holder.getImg().setText(null);
 					holder.getImg().setBackgroundDrawable(bd);
 				}
@@ -127,10 +130,6 @@ public class ConversationListAdapter extends BaseAdapter {
 		} else {
 			ContactInfo[] ctis = convInfo.getCtis();
 			String name = ConvNameFormat.ConvNameFormat(ctis);
-			if(!convInfo.getIsLoaded()){
-				new ConvPhotoAsyncLoader(c, holder, position, 
-						convInfo).execute();
-			}
 			holder.getName().setText(name);
 			holder.getImg().setText(null);
 			holder.getImg()

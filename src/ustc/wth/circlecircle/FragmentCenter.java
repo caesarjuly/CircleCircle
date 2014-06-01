@@ -13,6 +13,8 @@ import java.util.List;
 
 
 
+import service.CircleCircleFacade;
+import service.CircleCircleImp;
 import service.ContactService;
 import entity.ContactInfo;
 import entity.GroupInfo;
@@ -33,8 +35,6 @@ import java.util.Set;
 import entity.SmsInfo;
 
 import service.SmsService;
-import ustc.wth.circlecircle.ConversationActivity.mReceiver;
-import ustc.wth.circlecircle.ConversationActivity.mSender;
 import utils.Threads;
 import utils.Uris;
 
@@ -67,7 +67,7 @@ public class FragmentCenter extends Fragment {
 	private View myview;
 	private Context context;
 	private List<ContactInfo> contact_infos;
-	private ContactService contact;
+	private CircleCircleFacade circlecircle;
 
 	private  ImageButton imagebutton;
 	private BroadcastReceiver mSender;
@@ -84,6 +84,7 @@ public class FragmentCenter extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		circlecircle = new CircleCircleImp();
 	}
 
 	
@@ -139,7 +140,6 @@ public class FragmentCenter extends Fragment {
 					phoneSet.add(temp[1]);
 					long convId = Threads
 							.getOrCreateThreadId(context, phoneSet);
-					SmsService sms = new SmsService((Activity) context);
 					if (msg.length() > 0) {
 						SmsInfo newSms = new SmsInfo();
 						newSms.setDate(System.currentTimeMillis());
@@ -149,7 +149,7 @@ public class FragmentCenter extends Fragment {
 						newSms.setStatus(64);
 						newSms.setAddress(temp[1]);
 						newSms.setThread_id(convId);
-						Uri result = sms.addSms(newSms);
+						Uri result = circlecircle.addSms(newSms);
 						sendSMS(temp[1], temp[0], result);
 					}
 				}
@@ -195,50 +195,5 @@ public class FragmentCenter extends Fragment {
 		}
 	}
 
-	class mSender extends BroadcastReceiver {
 
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// 判断短信是否发送成功
-			switch (getResultCode()) {
-			case Activity.RESULT_OK:
-				Toast.makeText(context, "发送成功", Toast.LENGTH_LONG).show();
-				String uri = intent.getStringExtra("result");
-				SmsService smsService = new SmsService((Activity) context);
-				smsService.update(uri);
-				break;
-			default:
-				break;
-			}
-		}
-	};
-
-	class mReceiver extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// 表示对方成功收到短信
-			Toast.makeText(context, "对方接收成功", Toast.LENGTH_LONG).show();
-		}
-	};
-
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		mSender = new mSender();
-		mReceiver = new mReceiver();
-		context.registerReceiver(mSender,
-				new IntentFilter(Uris.SENT_SMS_ACTION));
-		context.registerReceiver(mReceiver, new IntentFilter(
-				Uris.DELIVERED_SMS_ACTION));
-		super.onResume();
-	}
-
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		context.unregisterReceiver(mSender);
-		context.unregisterReceiver(mReceiver);
-		super.onPause();
-	}
 }

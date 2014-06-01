@@ -4,6 +4,9 @@ import holder.SmsHolder;
 
 import java.util.HashMap;
 import java.util.List;
+
+import buffer.Hash;
+import buffer.NameBuffer;
 import ustc.wth.circlecircle.R;
 import utils.TimeFormat;
 import android.content.ClipboardManager;
@@ -28,14 +31,14 @@ public class SmsListAdapter extends BaseAdapter {
 	private List<SmsInfo> smsList;
 	Context c;
 	private LayoutInflater layoutinflater;
+	private Hash<String> nb;
 	private boolean isMass;
-	private HashMap<String, String> phoneToName;
 
-	public SmsListAdapter(Context c, List<SmsInfo> smsList, boolean isMass, HashMap<String, String> phoneToName) {
+	public SmsListAdapter(Context c, List<SmsInfo> smsList, boolean isMass) {
 		this.c = c;
 		this.smsList = smsList;
 		this.isMass = isMass;
-		this.phoneToName = phoneToName;
+		nb = NameBuffer.getInstance();
 		layoutinflater = LayoutInflater.from(c);
 	}
 
@@ -99,7 +102,7 @@ public class SmsListAdapter extends BaseAdapter {
 			holder.getSms_body().setBackgroundResource(R.drawable.bg_message_my_side_selected_pressed);
 			
 		}
-		String address = phoneToName.get(smsInfo.getAddress());
+		String address = nb.get(smsInfo.getAddress());
 		if(address == null){
 			address = smsInfo.getAddress();
 		}
@@ -131,7 +134,6 @@ public class SmsListAdapter extends BaseAdapter {
 			}
 			break;
 		}
-		
 		
 		holder.getSms_body().setText(smsInfo.getBody());
 

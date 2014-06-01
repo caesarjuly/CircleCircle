@@ -2,6 +2,7 @@ package service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,7 @@ import entity.CallInfo;
 import entity.ContactInfo;
 import entity.ConversationInfo;
 
+import utils.ContextUtil;
 import utils.Uris;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -20,14 +22,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.CallLog;
 import buffer.CanonicalBuffer;
+import buffer.NameBuffer;
 
 public class CallService {
-	private Activity activity;
-	private ContactService cs;
+	private ContextUtil activity;
+	Set<String> phone = new HashSet<String>();
+	private NameBuffer nb;
 
-	public CallService(Activity activity) {
-		this.activity = activity;
-		cs = new ContactService(activity);
+	public CallService() {
+		this.activity = ContextUtil.getInstance();
+		this.nb = NameBuffer.getInstance();
 	}
 	
 	public List<CallInfo> getCallLog(){
@@ -51,6 +55,7 @@ public class CallService {
 				call.setId(cursor.getInt(id));
 				call.setDate(cursor.getLong(date));
 				call.setPhone(cursor.getString(phone));
+				call.setName(nb.get(call.getPhone()));
 				if(phoneToDate.containsKey(cursor.getString(phone))){
 					continue;
 				}else{

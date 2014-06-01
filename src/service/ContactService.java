@@ -8,6 +8,7 @@ import java.util.List;
 
 
 import utils.CharacterParser;
+import utils.ContextUtil;
 import utils.Uris;
 import buffer.ContactBuffer;
 import android.app.Activity;
@@ -28,17 +29,17 @@ import entity.ContactInfo;
 
 
 public class ContactService{
-	private Activity activity;
+	private ContextUtil activity;
 	private Uri uri;
 	public static List<ContactInfo> contactinfos;
 	private List<ContactInfo> contactinfos2;
 	static  HashMap<Integer, String> contactBuffer = new HashMap<Integer, String>();
 	private CharacterParser characterParser;
 	
-	public ContactService(Activity activity) {
+	public ContactService() {
 		contactinfos = new ArrayList<ContactInfo>();
 		contactinfos2 = new ArrayList<ContactInfo>();
-		this.activity = activity;
+		this.activity = ContextUtil.getInstance();
 		this.uri = Uri.parse(Uris.Contacts_URI_RAW);
 	}	
 	

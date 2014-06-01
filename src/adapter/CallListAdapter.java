@@ -6,6 +6,9 @@ import holder.ConversationHolder;
 import java.util.HashMap;
 import java.util.List;
 
+import buffer.Hash;
+import buffer.PhotoBuffer;
+
 import ustc.wth.circlecircle.R;
 import utils.TimeFormat;
 
@@ -14,6 +17,7 @@ import entity.ConversationInfo;
 import entity.SmsInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -32,11 +36,13 @@ public class CallListAdapter extends BaseAdapter {
 	private List<CallInfo> callList;
 	Context c;
 	private LayoutInflater layoutinflater;
+	private Hash<Bitmap> pb;
 
 	public CallListAdapter(Context c, List<CallInfo> callList) {
 		this.c = c;
 		this.callList = callList;
 		layoutinflater = LayoutInflater.from(c);
+		pb = PhotoBuffer.getInstance();
 	}
 
 	/**
@@ -123,10 +129,10 @@ public class CallListAdapter extends BaseAdapter {
 				holder.getName().setText(callInfo.getPhone());
 			}
 		 
-		if (callInfo.isLoaded()) { // 被异步加载过
-			if (callInfo.getPhoto() != null) {
+		if (pb.contains(callInfo.getPhone())) { // 被异步加载过
+			if (pb.get(callInfo.getPhone()) != null) {
 				Drawable bd = new BitmapDrawable(c.getResources(),
-						callInfo.getPhoto());
+						pb.get(callInfo.getPhone()));
 				holder.getImg().setText(null);
 				holder.getImg().setBackgroundDrawable(bd);
 			}

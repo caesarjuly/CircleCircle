@@ -46,10 +46,6 @@ public class ConversationInfo{
 	 */
 	private boolean isMass;
 	/**
-	 * 是否异步加载过联系人信息，是为true，否为false
-	 */
-	private boolean isLoaded;
-	/**
 	 * 持有联系人对象
 	 */
 	private ContactInfo cti;
@@ -60,7 +56,6 @@ public class ConversationInfo{
 	
 	public ConversationInfo(){
 		isMass = false;
-		isLoaded = false;
 	}
 	
 	public long getId() {
@@ -144,14 +139,6 @@ public class ConversationInfo{
 
 	public void setIsMass(boolean isMass) {
 		this.isMass = isMass;
-	}
-
-	public boolean getIsLoaded() {
-		return isLoaded;
-	}
-
-	public void setIsLoaded(boolean isLoaded) {
-		this.isLoaded = isLoaded;
 	}
 
 	
