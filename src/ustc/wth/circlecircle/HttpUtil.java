@@ -14,7 +14,7 @@ import android.util.Log;
 
 public class HttpUtil {
 	// 基础URL
-	public static final String BASE_URL="http://192.168.1.121:8080/CCContact/";
+	public static final String BASE_URL="http://192.168.2.132:8080/CCContact/";
 	// 获得Get请求对象request
 	public static HttpGet getHttpGet(String url){
 		HttpGet request = new HttpGet(url);
